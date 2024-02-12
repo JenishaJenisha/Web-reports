@@ -1,0 +1,21 @@
+.generatedreportlist{
+    background-color: #FFFFFF;
+    padding: 0px 15px 5px 15px;
+    border: 0.2px solid #f0f0f0;
+    width: 100%;
+    margin: 5px 10px 5px 10px;
+    border-radius: 5px
+}
+.genreportflex{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.sendicon{
+    display: flex;
+    flex-wrap: wrap;  
+    align-items: center;
+}
+.genreportname{
+    cursor:pointer;
+}

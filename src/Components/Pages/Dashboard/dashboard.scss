@@ -1,0 +1,576 @@
+
+.contentlayout{
+ 
+  position: relative;
+}
+.headermenu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.headercontent {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-between;
+  margin-top: 50px;
+
+}
+
+.genbtn {
+  background-color: rgb(38, 178, 34);
+  color: #ffff;
+
+
+}
+
+.genbtnicon {
+  background-color: rgb(38, 178, 34);
+  color: #ffff;
+
+  font-size: 12px;
+}
+
+.genbtnicon:hover,
+.genbtn:hover {
+  color: #ffff !important;
+  border-color: #15a461 !important;
+  background-color:#1ba420;
+}
+.dropcontent {
+  border: 1px solid green;
+  box-shadow: 2px 2px 2px 2px darkgray;
+}
+
+.footercontent {
+  background-color: #ffffff;
+
+  text-align: center;
+}
+
+.layoutmodel {
+  font-family: ui-rounded;
+  font-size: larger;
+  background-color: cornflowerblue;
+  padding: 0px;
+  border-radius: 5px;
+  height: 40px;
+  color: white;
+  display: grid;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.bk-Figure {
+  height: 90%;
+  width: 100%;
+}
+
+.bk-Column {
+  height: 50%;
+  width: 50%;
+}
+.bk-DataTable{
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+}
+
+/* ANT D customization */
+.ant-modal-title {
+  font-family: ui-rounded;
+  font-size: 20px !important;
+  color: white !important;
+  background-color: cornflowerblue;
+  padding: 0px;
+  border-radius: 5px;
+  height: 40px;
+  display: grid;
+  align-items: center;
+  justify-content: space-around;
+
+}
+
+.ant-modal-close-x {
+  margin-top: 15px;
+  margin-right: 18px;
+}
+.ant-menu .ant-menu-item-selected {
+  background-color: #002140;
+}
+:where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-pr0fja).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+  background-color: #002140;
+}
+.dashboard-chart {
+  height: 100%;
+  width: 100%;
+}
+
+.page-break-container {
+  page-break-before: always;
+  position: relative;
+}
+
+.page-break {
+  border: none;
+  border-top: 1px dashed #000;
+  margin: 5px 0;
+  page-break-after: always;
+}
+
+.content-container {
+  // max-width: 100%; 
+  // max-height: 100%; 
+  // overflow: auto;
+  margin: 0;
+  // border:2px dashed gray;
+  margin-top: '45px';
+  background-color: '#f6f2e2';
+  background: linear-gradient(-90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(-90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(transparent 3px, #fff 3px, #ffffff 78px, transparent 78px), linear-gradient(-90deg, #fff 1px, transparent 1px), linear-gradient(-90deg, transparent 3px, #fff 3px, #fff 78px, transparent 78px), linear-gradient(#fff 1px, transparent 1px), #fff;
+  background-size:
+    4px 4px,
+    4px 4px,
+    80px 80px,
+    80px 80px,
+    80px 80px,
+    80px 80px,
+    80px 80px,
+    80px 80px;
+
+  .topmargin {
+    border: 0.5px dashed gray;
+    text-align: center;
+    resize: vertical;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .detailsruler {
+    border: 0.5px dashed gray;
+    text-align: center;
+    resize: vertical;
+    width: 100%;
+    overflow: auto;
+    height: 135px;
+  }
+
+  .detailreportruler {
+    border: 0.5px dashed gray;
+    text-align: center;
+    resize: vertical;
+    width: 100%;
+    overflow: auto;
+    height: 295px;
+  }
+
+  .reportheader {
+    // background-color:#cfefe3cf;
+    border: 0.5px dashed gray;
+    // padding: 10px;
+    text-align: center;
+    resize: vertical;
+    // transform:rotateX(-90deg);
+     width: 100%;
+    overflow: auto;
+    height: 91px;
+    // margin-top: -761px
+    // display:flex
+  }
+
+  ::-webkit-resizer {
+    cursor: pointer;
+    background-color: none;
+    transform: rotateX(90deg);
+  }
+
+  .headerinput {
+    border: none;
+    background-color: #cccccc0f;
+    font-size: 26px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+   
+
+  }
+  .editable-row .ant-form-item-explain {
+    position: absolute;
+    top: 100%;
+    font-size: 12px;
+  }
+
+  .footer {
+    border: 0.5px dashed gray;
+    // background-color:#cfefe3cf;
+    padding: 10px;
+    text-align: center;
+    // margin-top: 628px;
+    // position: relative;
+     resize: vertical;
+    // width: 100%;
+    overflow: auto;
+  }
+
+  .footerinput {
+    border: none;
+    background-color: #cccccc0f;
+    margin-left: 9px;
+  }
+ 
+  .content {
+    background-color: #f6f2e2;
+    background: linear-gradient(-90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(-90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(transparent 3px, #fff 3px, #ffffff 78px, transparent 78px), linear-gradient(-90deg, #fff 1px, transparent 1px), linear-gradient(-90deg, transparent 3px, #fff 3px, #fff 78px, transparent 78px), linear-gradient(#fff 1px, transparent 1px), #fff;
+    background-size:
+      4px 4px,
+      4px 4px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px,
+      80px 80px;
+  }
+}
+
+/* ------------------- GENERAL ------------------- */
+
+#rulers_and_block {
+  margin-left: 241px;
+  // width: 11cm;
+  padding-top: 20px;
+  // padding-left: 20px;
+}
+/* ------------------- RULER TOP ------------------- */
+
+.ruler_top {
+  position: relative;
+  height: 18px;
+  background-color: yellow;
+  margin-bottom: 6px;
+  margin-left: -129px;
+  
+  $numItems: 10; // Number of items you want to generate
+
+  // Generate styles for .cm and .mm
+  @for $i from 1 through $numItems {
+    $left: ($i - 1) * 10%;
+    
+    .cm:nth-of-type(#{$i}), .mm:nth-of-type(#{$i}) {
+      position: absolute;
+      border-left: 1px solid #555;
+      height: 14px;
+      width: 10%;
+      left: $left;
+    }
+
+    .cm:nth-of-type(#{$i}) {
+      display: flex;
+      align-items: flex-end;
+      
+      &:after {
+        content: "#{$i - 1}";
+        position: absolute;
+        top: 2px;
+        font: 11px/1 sans-serif;
+      }
+    }
+
+    // Adjust the height for the 5th mm element
+    @if $i == 5 {
+      .mm:nth-of-type(#{$i}) {
+        height: 10px;
+      }
+    } @else {
+      .mm:nth-of-type(#{$i}) {
+        height: 5px;
+      }
+    }
+  }
+  @for $i from 1 through  $numItems+1 {
+    $left: ($i - 1) * 10%;
+    
+    .cm:nth-of-type(#{$i}) {
+      left: $left;
+      
+      &:after {
+        content: #{$i - 1};
+      }
+    }
+  }
+  @for $i from 1 through  $numItems {
+    $left: $i * 10%;
+    .mm:nth-of-type(#{$i}) {
+      left: $left;
+    }
+  }
+}
+
+
+/* ------------------- RULER LEFT ------------------- */
+
+.ruler_left {
+  position: relative;
+  width: 20px;
+  height: 20cm;
+  background-color: #ffff00;
+
+  $numItems: 1500; // Number of items you want to generate
+
+  // Generate styles for .cm and .mm
+  @for $i from 1 through $numItems {
+    $cmTop: ($i - 1) * 5%;
+    $mmTop: ($i - 1) * 10%;
+    $mmWidth: 5px;
+    
+    // Adjust mm width for multiples of 5
+    @if $i % 5 == 0 {
+      $mmWidth: 10px;
+    }
+
+    .cm:nth-of-type(#{$i}),
+    .mm:nth-of-type(#{$i}) {
+      position: absolute;
+      width: 20px;
+    }
+
+    .cm:nth-of-type(#{$i}) {
+      top: $cmTop;
+      
+      &:after {
+        content: '#{$i - 1}';
+        position: absolute;
+        left: 2px;
+        font: 11px/1 sans-serif;
+      }
+    }
+
+    .mm:nth-of-type(#{$i}) {
+      top: $mmTop;
+      width: $mmWidth;
+      
+      &:after {
+        content: #{$i - 1};
+        position: absolute;
+        left: 2px;
+        font: 11px/1 sans-serif;
+      }
+    }
+  }
+
+  // Add styles from the second code block
+  .cm, .mm {
+    position: absolute;
+    border-top: 1px solid #555;
+    width: 14px;
+  }
+
+  .cm {
+    height: 1cm;
+  }
+
+  .mm {
+    height: 1mm;
+    width: 5px;
+  }
+
+  .mm:nth-of-type(5) {
+    width: 10px;
+  }
+
+  /* "x" centimeters : */
+  .cm:after {
+    position: absolute;
+    left: 2px;
+    font: 11px/1 sans-serif;
+  }
+}
+
+
+.topmargin {
+  border: 0.5px dashed gray;
+ height: 70px;
+}
+.pagefooterruler {
+  border: 0.5px dashed gray;
+  resize: vertical;
+  width: 100%;
+  overflow: auto;
+  height: 65px;
+}
+
+.marginbottomfooterruler {
+  border: 0.5px dashed gray;
+  resize: vertical;
+  width: 100%;
+  overflow: auto;
+  height: 50px;
+}
+
+.verticalheader {
+  background-color: #7cedb6;
+  width: 105px;
+  padding: 15px;
+  border: 0.5px dashed gray;
+}
+.verticalheader:hover {
+  background-color: #5cbf88; 
+}
+.rulerflex {
+  display: flex;
+  // border: 2px solid rgb(110, 208, 250);
+  // resize: vertical;
+  // height: 100%;
+  // overflow: auto;
+}
+
+.contentview {
+  display: flex;
+}
+
+.verticalcontent {
+  background-color: #adbae4;
+  width: 105px;
+  padding: 15px;
+  border: 0.5px dashed gray;
+}
+.verticalcontent:hover{
+  background-color:  #869adb;
+}
+
+.verticalfooter {
+  background-color: #cdaee5;
+  width: 105px;
+  padding: 15px;
+  border: 0.5px dashed gray;
+}
+.verticalfooter:hover{
+  background-color:#c89de9 ;
+}
+.contentflex {
+  display: flex;
+    width: 100%;
+    // overflow: auto;
+    // resize: vertical;
+    // border: 2px solid red;
+    // height: 100%;
+
+}
+
+.avatar-wrapper{
+	position: relative;
+	height: 100px;
+	width: 100px;
+	margin: 5px 0;
+  border: 0.5px solid green;
+	overflow: hidden;
+	transition: all .3s ease;
+  background-color: #d3dbd7;
+  resize: both;
+	&:hover{
+		transform: scale(1.05);
+		cursor: pointer;
+	}
+	&:hover .profile-pic{
+		opacity: .5;
+	}
+	.profile-pic {
+    height: 100%;
+		width: 100%;
+		transition: all .3s ease;
+    
+		&:after{
+			font-family: FontAwesome;
+			content: "\f007";
+			top: 0; left: 0;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			font-size: 190px;
+			background: #ecf0f1;
+			color: #34495e;
+			text-align: center;
+      display: none;
+		}
+	}
+	.upload-button {
+		position: absolute;
+		top: 0;
+    left: 0;
+		height: 100%;
+		width: 100%;
+    
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+		
+		&:hover .fa-arrow-circle-up{
+			opacity: .9;
+		}
+	}
+}
+.reportheaderlogo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  
+ 
+}
+.slick-header-columns {
+  background-color: #4096ff !important;
+}
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+.rh{
+  width: 100%;
+}
+.lablepageinput{
+  width: fit-content;
+}
+.labletextinput{
+  width: auto;
+}
+.resize-handletext {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  cursor: se-resize;
+  background-color: #ccc;
+}
+.templatenameform{
+  .ant-modal-header{
+    display: none
+  }
+  .ant-modal-close-x{
+    margin-top: -7px;
+    margin-left: 15px;
+  }
+}
+// .bokeh-slick-row.odd {
+//   background: none !important;
+//   .slick-cell{
+//     background-color:red !important;
+//   }
+// }
+// .slick-header-columns {
+//   background-color: #34db3c; /* Header background color */
+//   color: #ffffff; /* Header text color */
+// }
+
+// .slick-row {
+//   background-color: #fe0e0e; /* Row background color */
+//   color: #2c3e50; /* Row text color */
+// }
+
+// .slick-row:hover {
+//   background-color: #27a7fc; /* Hover background color */
+// }
+.slick-row.odd{
+  background-color:rgb(38, 178, 34) !important;
+}

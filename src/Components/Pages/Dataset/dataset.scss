@@ -1,0 +1,85 @@
+.casecaderstyle{
+    background-color: #ffffff !important;
+    width: -webkit-fill-available !important;
+    height: -webkit-fill-available !important;
+}
+
+.datasetaddtag{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    
+}
+.inputdb{
+ width: 85%;
+}
+// :where(.css-dev-only-do-not-override-dkbvqv).ant-modal .ant-modal-content {
+//     width:fit-content
+// }
+.datasetmodal{
+    width:fit-content !important;
+}
+.tagsearch{
+    margin-top: 10px;
+}
+.tagbtn{
+    margin-top: 29px;
+  }
+  .datasetform{
+    width: -webkit-fill-available;
+  }
+.datalist{
+    background-color: #ffffff;
+    border-radius: 5px;
+    border:0.3px solid rgb(226, 224, 224);
+    display: flex;
+    align-items: center;
+    width: 450px;
+    // height: 40px;
+}
+.dsname{
+    margin-left: 10px;
+    padding: 5px;
+    width: 298px 
+}
+.customcascader{
+    display: flex;
+    flex-direction: row;
+    gap:4px;
+}
+// .fielddiv{
+//     background-color: #fffefe;
+//     border-radius: 5px;
+//     border: 0.2px solid gray;
+//     box-shadow: 5px 10px #888888;
+    
+    
+// }
+
+.fielddiv {
+   
+    background-color: #fff;
+    position: absolute;
+    padding: 15px;
+    margin-left: 465px;
+    border:0.3px solid rgb(226, 224, 224);
+    border-radius: 5px;
+  }
+  
+  .fielddiv:before {
+    position: absolute;
+    left: -10px;
+    content: "";
+    // right: calc(50% - 10px);
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #ffffff transparent;
+    transform: rotate(18deg);
+    
+  }
+  .delbtn{
+    margin-left: 35px;
+  }
+  .editbtn{
+    margin-left: 35px;
+  }

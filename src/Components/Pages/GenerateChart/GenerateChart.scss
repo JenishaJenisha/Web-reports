@@ -1,0 +1,103 @@
+
+.downloadbtn{
+    background-color: rgb(24, 146, 105);
+    color: #ffff;
+   
+}
+.savereport{
+  color: #ffff !important;
+    border-color: #15a461 !important;
+    background-color:#1ba420;
+    margin:5px;
+  // float: right !important;
+  // margin-top: -50px !important;
+  // margin-right: 25px !important;
+}
+
+.report-chart{
+    height: 700px; 
+}
+
+
+.headerviewer {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .genreportheader {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+    height: 64px;
+    margin-top: 0px;
+    margin-left: -13px;
+    margin-right: -15px;
+    // justify-content: center;
+  }
+  
+  .r-header{
+    color: rgb(0, 8, 255);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 32px;
+    padding: 20px;
+  }
+  .r-details,
+  .r-detailreport,
+  .r-footer {
+    
+    padding: 20px;
+  }
+  
+  .reportpage{
+    margin: 25px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    margin-top: 35px;
+    margin-bottom: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  
+ 
+  
+  .page-break-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .page-break {
+    border-top: 2px dashed #000;
+    width: 100%;
+    margin-top: 5px;
+  }
+  // .rh{
+  //   display: flex;
+  //   flex-direction: row;
+  //   flex-wrap: wrap;
+  //   justify-content: center;
+  //   align-items: center;
+  //   margin-top: -37px
+    
+  // }
+  @media print {
+   
+    .page-break {
+      display: none;
+      page-break-after: always;
+    }
+  
+  }
+  .topbtn{
+    display:flex;
+    flex-direction: row-reverse;
+    padding: 20px;
+    margin-top: -89px;
+  }
+  // .bk-data-table{
+  //   background-color: #1ba420;
+  //   .slick-pane slick-pane-header slick-pane-left{
+  //     background-color: #15a461 !important;
+  //     color:white !important
+  //   }
+  // }
+  
