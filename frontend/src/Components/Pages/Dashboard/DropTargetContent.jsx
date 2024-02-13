@@ -143,7 +143,7 @@ const generateUniqueId = () => {
       const allowedDropZones = ['details', 'reportheader', 'Detailreport', 'pagefooter','topmargin','marginbottom'];
       const dropPosition = monitor.getClientOffset();
       const dropTargetElement = document.elementFromPoint(dropPosition.x, dropPosition.y);
-     
+  
     //  console.log(dropPosition.x , '-',dropPosition.y ,"dropTargetElement");
    
       if (!dropTargetElement || !allowedDropZones.includes(dropTargetElement.id)) {
@@ -444,6 +444,8 @@ const handleSaveClick=()=>{
       // pdfMake.createPdf(documentDefinition).print(); //for print
 
 }
+
+
   return (
     <>
     

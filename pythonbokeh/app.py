@@ -42,16 +42,17 @@ from bokeh.models import (ColumnDataSource, DataCube, GroupingInfo,
 from bokeh.models import Arrow, VeeHead, HTMLTemplateFormatter
 from icecream import ic 
 from bokeh.models import Button
-
+import bokeh.sampledata
+bokeh.sampledata.download()
 app = Flask(__name__)
 CORS(app) 
 # ic.disable() 
 ic.enable()
 global p
 app.secret_key = 'your_secret_key'
-# @app.route('/')
-# def welcome():
-#     return "Python bokeh charts flask api"
+@app.route('/')
+def welcome():
+    return "Python bokeh charts flask api"
 @app.route('/generate_chart', methods=['GET','POST'])
 
 
@@ -88,7 +89,7 @@ def generate_chart():
         return jsonify({'error': str(e)}), 500
 def fetch_table_data():
     try:
-        headers = {"Authorization": "Bearer 2V9dXNT8K-2CQrOahlyMn8MsnPjw5DNApwH7QiX2PjWYof7DpKoODEWfK-aPNtMqlFF-Rx1IEhV4ggcKK1Xb5pc7KnueKpDTBI8yBe52kkzVDP2Jfzm1jOQAwY7HzjttijBkQK_u5QTOwo1CnVCnfnsy1bFJKXHBgxSu_Y55i1sRwf7iYG6Nb9USjNz8Bsi_7L_z9gXni2TRuU2sl41KgE11OUP-831PBnULDIBeqz_ZNAO6DoVMKOMv1De2t4dShbz0KsJOc2JAr0YerQonHZwExF5IeE3AUBpkvjBSqEArkmgRdNfeWK2G8st89pRIWMWUa_rXelohxmligmMe3Q"}
+        headers = {"Authorization": "Bearer _H8n0fZ_5OxHliHALpISYQ63GIpifFbybUvlNVWSGPAeEOIUyjtiLkJ5pNQVGei7k-IyaxrUsIlu0zLWXfh9Kgjuyly8lrqPpA43zxQbQ-jHURftEbgA0wvZ8ZylCVAjKhD9P0DVIW9lawp4t_wj33GjuIM_oywXIYvlVziq8Frlyx_oGw3Lvh8ucJ5vXDRK0qkvJeeyQpbvSlvSh9CZbCLl1OR-1kdbyPQXnu9LPG6rwR1QakLOxsaJlHatzLA_jHSjTPqwcsmW94FD8J-dS6WbbJEqmkhNdajqH_vnB-KcvFle_e-ZfxEJr7Uw6TVsbAV_dRAQJVXf9fb7C3T6IQ"}
         # response = requests.get("http://restapi.adequateshop.com/api/Tourist?page=2")
         response = requests.get("http://122.165.186.71:1220/api/GetOPCValuesByTagsTime?TagNames=10FIC01/PV.CV&UTCTimes=1", headers=headers)
        
@@ -609,7 +610,7 @@ def generate_bokeh_chart(chart_type,table_data=None,time=None):
         # columns = [TableColumn(field=col, title=col,formatter=HTMLTemplateFormatter(template='<u><%= value %></u>')) for col in df.columns]
             # name = [entry['tourist_name'] for entry in data_key]
             # print("name>>>>",name)
-        p = DataTable(source=source, columns=columns,editable=True,fit_columns=True,selectable=True,index_position=None,sortable=True,formatter=HTMLTemplateFormatter(template='<u><%= value %></u>'))
+        p = DataTable(source=source, columns=columns,editable=True,fit_columns=True,selectable=True,index_position=None,sortable=True)
        
         # button = Button(label="Click Me!")
 

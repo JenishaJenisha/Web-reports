@@ -224,92 +224,22 @@ const TemplateList = () => {
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}
         >
-          <Menu
-            theme="dark"
-            mode="inline"
-            className="sidermenulist"
-            defaultSelectedKeys={["home"]}
-            style={{
-              width: collapsed ? "80px" : "200px", // Adjust width when collapsed
-            }}
-          >
-             {menuItems.map(item => (
-        <Menu.Item key={item.key} icon={item.icon} title={item.title} onClick={item.onClick}>
-          {item.label}
-        </Menu.Item>
-      ))}
-            {/* <Menu.Item
-              key="home"
-              icon={<AppstoreAddOutlined style={{ fontSize: "200%" }} />}
-              title="DashBoard"
-              onClick={dashboardnavigation}
-            >
-              DashBoard
-            </Menu.Item>
-            <Menu.Item
-              key="sub3"
-              icon={<FolderOpenOutlined style={{ fontSize: "200%" }} />}
-              title="Templates"
-              onClick={templatenavigation}
-            >
-              Templates
-            </Menu.Item>
-            <Menu.Item
-              key="report"
-              icon={<FileDoneOutlined style={{ fontSize: "200%" }} />}
-              title="Reports"
-              onClick={handlereportsnavigation}
-            >
-              Reports
-            </Menu.Item>
-            <Menu.Item
-              key="20"
-              icon={<ScheduleOutlined style={{ fontSize: "200%" }} />}
-              title="Scheduled Reports"
-              onClick={handleschedulenavigation}
-            >
-              Scheduled Reports
-            </Menu.Item> */}
-            {/* <Menu.Item
-              key="19"
-              icon={<TableOutlined style={{ fontSize: "200%" }} />}
-              title="Spread Sheet"
-              onClick={handlespreadsheetnavigation}
-            >
-              Spread Sheet
-            </Menu.Item> */}
-               {/* <Menu.Item
-              key="21"
-              icon={<FolderViewOutlined style={{ fontSize: "200%" }}/>}
-              title="Report Viewer"
-              onClick={handlereportViewernavigation}
-            >
-              Report Viewer
-            </Menu.Item>
-            <Menu.Item
-              key="22"
-              icon={<HddOutlined style={{ fontSize: "200%" }}/>}
-              title="Data Set"
-              onClick={handledatasetnavigation}
-            >
-              Data Set
-            </Menu.Item> */}
-            {/* <Menu.SubMenu
-          key="25"
-          icon={<UserOutlined style={{ fontSize: "200%" }} />}
-          title="User Space" onClick={userspacenavigation}
-        >
-           <Search
-                placeholder="Search "
-                
-                value={searchTerm}
-                onChange={(e) => setSearchsaveasTerm(e.target.value)}
-                style={{ margin: '10px',width:'85%' }}
-              />
-    {FilteredsaveasMenuItems}
-        
-        </Menu.SubMenu> */}
-          </Menu>
+      <Menu
+  theme="dark"
+  mode="inline"
+  className="sidermenulist"
+  defaultSelectedKeys={["home"]}
+  style={{
+    width: collapsed ? "80px" : "200px", // Adjust width when collapsed
+  }}
+  items={menuItems.map(item => ({
+    key: item.key,
+    icon: item.icon,
+    title: item.title,
+    onClick: item.onClick,
+    label: item.label
+  }))}
+/>
         </Sider>
         <Layout>
           <Content style={{ margin: "0 16px" }}>

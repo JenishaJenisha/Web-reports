@@ -23,8 +23,6 @@ const BokehChart = ({ chartType, chartData, containerId,chartId }) => {
       }
       try {
         const chartObject = JSON.parse(chartData);
-
-        debugger;
         // console.log('Chart Object:', chartObject);
         window.Bokeh.embed.embed_item(chartObject, containerId,chartId); // Embed the Bokeh chart
         
