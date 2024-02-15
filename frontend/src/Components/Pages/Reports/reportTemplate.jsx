@@ -46,6 +46,7 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 const { Header } = Layout;
 
 const ReportTemplates = ({ id, selectedTempReportdetail }) => {
+  const [reportsaveform] = Form.useForm();
   console.log( id, selectedTempReportdetail," id, selectedTempReportdetail")
   const dispatch = useDispatch();
   const {
@@ -357,10 +358,15 @@ const ReportTemplates = ({ id, selectedTempReportdetail }) => {
     modifiedAt: document.lastModified,
   };
   const handleOk = () => {
+    reportsaveform
+    .validateFields()
+    .then((values) => {
     setIsModalOpen(false);
     dispatch(setCreatedAt(saveascomponentData.createdAt));
     dispatch(setSaveasReportList(saveascomponentData));
     dispatch(setIsSaveasReport(true));
+    reportsaveform.resetFields();
+    })
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -957,7 +963,13 @@ console.log(formattedValues,"formattedValues")
       setSelectedContent(selectedOption.content);
     }
   };
-  
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  }; 
   return (
     <>
       <div id={id} className="templatedashboard">
@@ -995,7 +1007,10 @@ console.log(formattedValues,"formattedValues")
                    {/* <img src={preview} alt="" height='25px' width='25px'/> */}
                    Preview Report </Button> 
                   <Button className="saveasbtn" onClick={handlegeneratereport} >
+                    <div  style={{display:"flex"}}>
                     <img src={scheduleicon} alt="" height='25px' width='25px'/>Schedule Report
+                    </div>
+                    
                   </Button>
                   {/* <AddReportSchedulermodel open={open}
         onCreate={onCreate}
@@ -1126,9 +1141,22 @@ console.log(formattedValues,"formattedValues")
                 okText="Save"
                 className="templatenameform"
               >
+                <Form 
+                form={reportsaveform}
+                name="reportpagesaveform" 
+                onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+                id="reportpagesaveform">
                 <label>
                   <h3>Enter the Report Name:</h3>
                 </label>
+                <Form.Item name="reportname"
+                rules={[
+              {
+                required: true,
+                message: "Please Enter the Template name!"
+              }
+            ]}>
                 <Input
                   type="text"
                   value={saveasReportName}
@@ -1136,6 +1164,10 @@ console.log(formattedValues,"formattedValues")
                   allowClear
                   id={saveasReportId}
                 />
+                </Form.Item>
+                </Form>
+                
+               
               </Modal>
               {/* <Modal title="Report Name" open={isreportModalOpen} onOk={handlereportOk} onCancel={handlereportCancel} okText='Save' className="templatenameform">
       <label><h3>Enter the Report Name:</h3></label>
@@ -1387,7 +1419,7 @@ console.log(formattedValues,"formattedValues")
                                   <Popover title="Conditional Formatting" placement="right" content={<ConditionalFormattingForm/>}>
                                     <Button  icon={<RetweetOutlined />}/>
                                   </Popover>
-  <Button onMouseDown={Addbtnhandle}>+</Button>
+  {/* <Button onMouseDown={Addbtnhandle}>+</Button> */}
                                   </div>
                                   {/* {settingsdrawerOpen === true && (
                                     <Drawer

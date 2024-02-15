@@ -121,7 +121,7 @@ const Templatecards = () => {
                 allowClear
               />
             </div>
-            <div>
+            <div className="createnewbtn">
               <Button onClick={handlenewTemplate} className="saveasbtn">
                 <PlusCircleOutlined />
                 Create New

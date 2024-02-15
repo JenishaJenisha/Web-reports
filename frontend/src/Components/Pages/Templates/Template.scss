@@ -16,7 +16,7 @@
     font-size: 15px;
     float: right;
     margin-top: 14px;
-    display: flex;
+    
    
 }
 .btntemplate{
@@ -25,7 +25,10 @@
 .saveasbtn:hover {
     color: #ffff !important;
     border-color: #15a461 !important;
-    background-color: #1ba420;
+    background-color: #1ba420 !important;
+}
+.createnewbtn{
+    margin: 0px 5px;
 }
 .homeHeader{
     display: flex;

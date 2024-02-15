@@ -1,5 +1,5 @@
 import React,{useState,useRef} from 'react';
-import { Layout,  theme,Row,Col,message,Modal,Input} from 'antd';
+import { Layout,  theme,Row,Col,message,Modal,Input, Form} from 'antd';
 import './dashboard.scss';
 import DraggableSiderItem from './DraggableSiderItem';
 import {HTML5Backend} from 'react-dnd-html5-backend';
@@ -21,6 +21,8 @@ import { setTemplate,setTemplateName,setTemplateId} from "../../Store/slices/Tem
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const { Header, Content } = Layout;
 const Dashboard = () => {
+  const [form] = Form.useForm();
+  const [reportnameform] = Form.useForm();
   const dispatch = useDispatch();
   const spreadsheetData =  useSelector((state)=>state.spreadsheetData)
   const droppedCharts = useSelector((state) => state.charts.droppedCharts);
@@ -317,11 +319,25 @@ const Dashboard = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    setIsModalOpen(false);
-    handleSaveTemplateClick();
-     const createdAt = new Date().getTime();
-     const modifiedAt = document.lastModified
-    dispatch(setTemplateList({templateId,templateName,createdAt,modifiedAt}));
+   
+      form
+        .validateFields()
+        .then((values) => {
+          setIsModalOpen(false);
+          handleSaveTemplateClick();
+          const createdAt = new Date().getTime();
+          const modifiedAt = document.lastModified
+         dispatch(setTemplateList({templateId,templateName,createdAt,modifiedAt}));
+          form.resetFields();
+          onCreate(values);
+          
+         
+        })
+        .catch((info) => {
+          console.log('Validate Failed:', info);
+        });
+  
+   
     // dispatch(setTemplate(componentData))
    
   };
@@ -329,12 +345,20 @@ const Dashboard = () => {
     setIsModalOpen(false);
   };
   const handleSaveReport=()=>{
-    const createdAt = new Date().getTime();
-     const modifiedAt = document.lastModified
-    dispatch(setIsReportModalOpen(false));
-    dispatch(setReports({reportId,reportName,reportData,createdAt,modifiedAt}));
-    dispatch(resetDroppedContent());
-    dispatch(resetDroppedCharts());
+    reportnameform.validateFields()
+      .then((values)=>{
+        const createdAt = new Date().getTime();
+        const modifiedAt = document.lastModified
+       dispatch(setIsReportModalOpen(false));
+       dispatch(setReports({reportId,reportName,reportData,createdAt,modifiedAt}));
+       dispatch(resetDroppedContent());
+       dispatch(resetDroppedCharts());
+       reportnameform.resetFields();
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+    
     
   }
   const generateReportId = uuidv4()+`${reportName}`;
@@ -345,6 +369,21 @@ const Dashboard = () => {
   const handlereportCancel=()=>{
     dispatch(setIsReportModalOpen(false))
   }
+  
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+  const onFinishReport = (values) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailedReport = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
    <>
 
@@ -374,8 +413,22 @@ const Dashboard = () => {
           {contextHolder}
          <Button className='genbtn' onClick={showModal}>Save template</Button>
          <Modal title="Template Name" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Save' className="templatenameform">
-      <label><h3>Enter the Template Name:</h3></label>
-        <Input type="text" value={templateName} onChange={handleChange} allowClear id={templateId}/>
+          <Form form={form}
+          id="tempnameform" name='tempnameform' onFinish={onFinish}
+          onFinishFailed={onFinishFailed}>
+            <label><h3>Enter the Template Name:</h3></label>
+            <Form.Item name="templatename"
+            rules={[
+              {
+                required: true,
+                message: "Please Enter the Template name!"
+              }
+            ]}>
+            <Input type="text" value={templateName} onChange={handleChange} allowClear id={templateId}/> 
+            </Form.Item>
+          </Form>
+      {/* <label><h3>Enter the Template Name:</h3></label>
+        <Input type="text" value={templateName} onChange={handleChange} allowClear id={templateId}/> */}
       </Modal>
           {/* <Button className='genbtn'onClick={()=>handleSavePdf(reportData)}>Save PDF</Button> */}
           <Button className='genbtn'onClick={()=>dispatch(setIsReportModalOpen(true))}>Save Report</Button>
@@ -384,8 +437,22 @@ const Dashboard = () => {
         <Input type="text" value={reportName} onChange={handlereportChange} allowClear id={reportId}/>
       </Modal> */}
         <Modal title="Report Name" open={isreportModalOpen}  onOk={handleSaveReport} onCancel={handlereportCancel}okText='Save' className="templatenameform">
-      <label><h3>Enter the Report Name:</h3></label>
-        <Input type="text" value={reportName} onChange={handlereportChange}allowClear id={reportId}/>
+          <Form  form={reportnameform}
+          id="reportnameform" name="reportnameform"
+          onFinish={onFinishReport}
+          onFinishFailed={onFinishFailedReport}>
+          <label><h3>Enter the Report Name:</h3></label>
+            <Form.Item  name="reportname"  rules={[
+              {
+                required: true,
+                message: "Please Enter the Report name!"
+              }
+            ]}>
+            <Input type="text" value={reportName} onChange={handlereportChange}allowClear id={reportId}/>
+            </Form.Item>
+          </Form>
+      
+        
       </Modal>
           {/* <Button className='genbtnicon'><UploadOutlined /></Button> */}
           <div>

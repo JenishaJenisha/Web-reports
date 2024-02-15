@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 const CollectionCreateForm = ({ id,initialValues,open, onCreate, onCancel }) => {
   console.log(initialValues,"initialValues")
   const [radioValue, setRadioValue] = useState();
+  const [realhistorical,setRealhistorical] = useState();
   const [isManual, setIsManual] = useState(false);
   const [isTagmaster, setIsTagmaster] = useState(false);
   const [ishistorical, setIsHistorical] = useState(false);
@@ -103,7 +104,7 @@ dispatch(setTagModalOpen(true))
     },
     {
       title: "Range Low",
-      dataIndex: "RangeLow",
+      dataIndex: "RangeLow", 
       key: "RangeLow",
     },
     {
@@ -147,8 +148,12 @@ dispatch(setTagModalOpen(true))
     setRadioValue(e.target.value);
     setIsManual(e.target.value === "Manual");
     setIsTagmaster(e.target.value === "TagMaster");
-    setIsHistorical(e.target.value === "Historical");
+   
   };
+  const onradiobtnrealtimeChange=(e)=>{
+    setRealhistorical(e.target.value);
+    setIsHistorical(e.target.value === "Historical");
+  }
   const handleDurationTypeChange = (value) => {
     setDurationType(value);
   };
@@ -326,12 +331,7 @@ dispatch(setTagModalOpen(true))
                 <Radio name="percentage" value="Percentage">
                   Percentage
                 </Radio>
-                <Radio name="realTime" value="realTime">
-                  Real Time
-                </Radio>
-                <Radio name="historical" value="Historical">
-                  Historical
-                </Radio>
+                
               </Radio.Group>
             </div>
 
@@ -343,6 +343,17 @@ dispatch(setTagModalOpen(true))
           <Checkbox value="Percentage">Percentage</Checkbox>
         </Checkbox.Group>
             </div> */}
+          </Form.Item>
+          <Form.Item name="reacltimeorhistorical" label="RealTime/Historical">
+            <Radio.Group  onChange={onradiobtnrealtimeChange} value={realhistorical}>
+            <Radio name="realTime" value="realTime">
+                  Real Time
+                </Radio>
+                <Radio name="historical" value="Historical">
+                  Historical
+                </Radio>
+            </Radio.Group>
+        
           </Form.Item>
           <Form.Item name="rangelow" label="Range Low">
             <Input type="number" disabled={!isManual} />
