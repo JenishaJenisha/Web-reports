@@ -89,9 +89,9 @@ def generate_chart():
         return jsonify({'error': str(e)}), 500
 def fetch_table_data():
     try:
-        headers = {"Authorization": "Bearer _H8n0fZ_5OxHliHALpISYQ63GIpifFbybUvlNVWSGPAeEOIUyjtiLkJ5pNQVGei7k-IyaxrUsIlu0zLWXfh9Kgjuyly8lrqPpA43zxQbQ-jHURftEbgA0wvZ8ZylCVAjKhD9P0DVIW9lawp4t_wj33GjuIM_oywXIYvlVziq8Frlyx_oGw3Lvh8ucJ5vXDRK0qkvJeeyQpbvSlvSh9CZbCLl1OR-1kdbyPQXnu9LPG6rwR1QakLOxsaJlHatzLA_jHSjTPqwcsmW94FD8J-dS6WbbJEqmkhNdajqH_vnB-KcvFle_e-ZfxEJr7Uw6TVsbAV_dRAQJVXf9fb7C3T6IQ"}
+        headers = {"Authorization": "Bearer zp9I2aQdY8p8hNmBBoIl547TPCWATzigoFNnI4Vi9ozCQbmFVzDOrJqEKrfYgZ31rpKOTgoH7obli6x45m2Jiz3qpQQ50xloIN2relKm2dZdwatt3kxUiC9pxi26hgzVPX3fYi9mpa47A3OHNNmlKgo9eymEFlKeOa5i14RTCLzftK0Hxhz6XNU7o0DJrH56H9RLhLsRUYjfyrmgMRTCut4uBlDiEroa4cVyy3fS8bc4KMUps5KO6rk2X4IJL6r4kGseAt5M7YOvCecxipl-JYxWdGwsIDMucvWUQiyq-fhx4m5x0a1ygK2AfKgJdvXTUKvAb26FFf6QA7x3cyXeZg"}
         # response = requests.get("http://restapi.adequateshop.com/api/Tourist?page=2")
-        response = requests.get("http://122.165.186.71:1220/api/GetOPCValuesByTagsTime?TagNames=10FIC01/PV.CV&UTCTimes=1", headers=headers)
+        response = requests.get("http://192.168.29.111:1220/api/GetOPCValuesByTagsTime?TagNames=10FIC01/PV.CV&UTCTimes=1", headers=headers)
        
         # response = requests.get("https://localhost:8000", verify=False)
         response.raise_for_status()
@@ -115,7 +115,7 @@ def fetch_table_data():
         return None
 def merge_datasets(table_data, added_data):
     return {**table_data, **added_data}
-def generate_bokeh_chart(chart_type,table_data=None,time=None):
+def generate_bokeh_chart(chart_type,table_data=None,):
     p = figure(title="Bokeh Chart", x_axis_label="X-axis", y_axis_label="Y-axis",resizable= True,)
     x = {
     'United States': 157,
@@ -135,11 +135,28 @@ def generate_bokeh_chart(chart_type,table_data=None,time=None):
     data['angle'] = data['value']/data['value'].sum() * 2*pi
     data['color'] = Category20c[len(x)]
     if chart_type == 2: 
-        p = figure(title="Line Chart",toolbar_location=None, tools="")
-        p.line([1, 2, 3, 4, 5], [10, 20, 30, 40, 60], line_width=2)
+        num_lines = 10
+        num_points = 4
+        x = np.linspace(0, 5, num_points)
+
+        # Create a figure
+        p = figure(title="Line Chart", x_axis_label='X', y_axis_label='Y', toolbar_location=None, tools="")
+
+        # Create a data source for the lines
+        source = ColumnDataSource(data=dict(x=x))
+
+        colors = [f"#{''.join(np.random.choice(list('0123456789ABCDEF')) for _ in range(6))}" for _ in range(num_lines)]
+
+        # Generate lines with random y values and add them to the plot with different colors
+        for i in range(num_lines):
+            y = np.random.rand(num_points) * 4  # Random y values
+            color = colors[i]
+            p.line(x, y, line_width=2, line_color=color)
+            for j in range(num_points):
+                p.text(x[j], y[j], text=[f'({x[j]:.2f}, {y[j]:.2f})'], text_font_size="10px")
         # show(p)
     elif chart_type == 3:
-        p = figure(title="Wedge Chart",toolbar_location=None, tools="")
+        p = figure(title="Pie Chart",toolbar_location=None, tools="")
         p.wedge(x=0, y=1, radius=0.4,
         start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),
         line_color="white", fill_color='color', legend_field='country', source=data)
@@ -196,146 +213,254 @@ def generate_bokeh_chart(chart_type,table_data=None,time=None):
         p.add_tools(hover)
     elif chart_type == 6:
  
-        p = figure(title="Surface Plot",toolbar_location=None, tools="")
-        CODE = """
-        import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
-        import {ColumnDataSource} from "models/sources/column_data_source"
-        import * as p from "core/properties"
+        # p = figure(title="Surface Plot",toolbar_location=None, tools="")
+        # CODE = """
+        # import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
+        # import {ColumnDataSource} from "models/sources/column_data_source"
+        # import * as p from "core/properties"
 
-        declare namespace vis {
-        class Graph3d {
-            constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
-            setData(data: vis.DataSet): void
-        }
+        # declare namespace vis {
+        # class Graph3d {
+        #     constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
+        #     setData(data: vis.DataSet): void
+        # }
 
-        class DataSet {
-            add(data: unknown): void
-        }
-        }
+        # class DataSet {
+        #     add(data: unknown): void
+        # }
+        # }
 
-        const OPTIONS = {
-        # width: '650px',
-        # height: '600px',
-        style: 'surface',
-        showPerspective: true,
-        showGrid: true,
-        keepAspectRatio: true,
-        verticalRatio: 1.0,
-        cameraPosition: {
-            horizontal: -0.35,
-            vertical: 0.22,
-            distance: 1.8,
-        },
-        }
+        # const OPTIONS = {
+        # # width: '650px',
+        # # height: '600px',
+        # style: 'surface',
+        # showPerspective: true,
+        # showGrid: true,
+        # keepAspectRatio: true,
+        # verticalRatio: 1.0,
+        # cameraPosition: {
+        #     horizontal: -0.35,
+        #     vertical: 0.22,
+        #     distance: 1.8,
+        # },
+        # }
 
-        export class Surface3dView extends LayoutDOMView {
-        declare model: Surface3d
+        # export class Surface3dView extends LayoutDOMView {
+        # declare model: Surface3d
 
-        private _graph: vis.Graph3d
+        # private _graph: vis.Graph3d
 
-        initialize(): void {
-            super.initialize()
+        # initialize(): void {
+        #     super.initialize()
 
-            const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
-            const script = document.createElement("script")
-            script.onload = () => this._init()
-            script.async = false
-            script.src = url
-            document.head.appendChild(script)
-        }
+        #     const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
+        #     const script = document.createElement("script")
+        #     script.onload = () => this._init()
+        #     script.async = false
+        #     script.src = url
+        #     document.head.appendChild(script)
+        # }
 
-        private _init(): void {
+        # private _init(): void {
 
-            this._graph = new vis.Graph3d(this.shadow_el, this.get_data(), OPTIONS)
+        #     this._graph = new vis.Graph3d(this.shadow_el, this.get_data(), OPTIONS)
 
-            this.connect(this.model.data_source.change, () => {
-            this._graph.setData(this.get_data())
-            })
-        }
+        #     this.connect(this.model.data_source.change, () => {
+        #     this._graph.setData(this.get_data())
+        #     })
+        # }
 
-        get_data(): vis.DataSet {
-            const data = new vis.DataSet()
-            const source = this.model.data_source
-            for (let i = 0; i < source.get_length()!; i++) {
-            data.add({
-                x: source.data[this.model.x][i],
-                y: source.data[this.model.y][i],
-                z: source.data[this.model.z][i],
-            })
-            }
-            return data
-        }
+        # get_data(): vis.DataSet {
+        #     const data = new vis.DataSet()
+        #     const source = this.model.data_source
+        #     for (let i = 0; i < source.get_length()!; i++) {
+        #     data.add({
+        #         x: source.data[this.model.x][i],
+        #         y: source.data[this.model.y][i],
+        #         z: source.data[this.model.z][i],
+        #     })
+        #     }
+        #     return data
+        # }
 
-        get child_models(): LayoutDOM[] {
-            return []
-        }
-        }
+        # get child_models(): LayoutDOM[] {
+        #     return []
+        # }
+        # }
 
-        export namespace Surface3d {
-        export type Attrs = p.AttrsOf<Props>
+        # export namespace Surface3d {
+        # export type Attrs = p.AttrsOf<Props>
 
-        export type Props = LayoutDOM.Props & {
-            x: p.Property<string>
-            y: p.Property<string>
-            z: p.Property<string>
-            data_source: p.Property<ColumnDataSource>
-        }
-        }
+        # export type Props = LayoutDOM.Props & {
+        #     x: p.Property<string>
+        #     y: p.Property<string>
+        #     z: p.Property<string>
+        #     data_source: p.Property<ColumnDataSource>
+        # }
+        # }
 
-        export interface Surface3d extends Surface3d.Attrs {}
+        # export interface Surface3d extends Surface3d.Attrs {}
 
-        export class Surface3d extends LayoutDOM {
-        declare properties: Surface3d.Props
-        declare __view_type__: Surface3dView
+        # export class Surface3d extends LayoutDOM {
+        # declare properties: Surface3d.Props
+        # declare __view_type__: Surface3dView
 
-        constructor(attrs?: Partial<Surface3d.Attrs>) {
-            super(attrs)
-        }
+        # constructor(attrs?: Partial<Surface3d.Attrs>) {
+        #     super(attrs)
+        # }
 
-        static __name__ = "Surface3d"
+        # static __name__ = "Surface3d"
 
-        static {
+        # static {
             
-            this.prototype.default_view = Surface3dView
+        #     this.prototype.default_view = Surface3dView
 
 
-            this.define<Surface3d.Props>(({String, Ref}) => ({
-            x:[ String ],
-            y:[ String ],
-            z:[ String ],
-            data_source:[Ref(ColumnDataSource)],
-            }))
-        }
-        }
-        """
+        #     this.define<Surface3d.Props>(({String, Ref}) => ({
+        #     x:[ String ],
+        #     y:[ String ],
+        #     z:[ String ],
+        #     data_source:[Ref(ColumnDataSource)],
+        #     }))
+        # }
+        # }
+        # """
+
+        # class Surface3d(LayoutDOM):
+
+        #     __implementation__ = TypeScript(CODE)
+
+        #     data_source = Instance(ColumnDataSource)
+
+        #     x = String()
+        #     y = String()
+        #     z = String()
+
+
+        # x = np.arange(0, 300, 10)
+        # y = np.arange(0, 300, 10)
+
+        # xx, yy = np.meshgrid(x, y)
+        # xx = xx.ravel()
+        # yy = yy.ravel()
+
+        # value = np.sin(xx / 50) * np.cos(yy / 50) * 50 + 50
+
+        # source = ColumnDataSource(data=dict(x=xx, y=yy, z=value))
+
+        # p = Surface3d(x="x", y="y", z="z", 
+        #                     data_source=source, 
+        #                     # width=680, 
+        #                     # height=600
+        #                     )
 
         class Surface3d(LayoutDOM):
-
-            __implementation__ = TypeScript(CODE)
-
-            data_source = Instance(ColumnDataSource)
-
             x = String()
             y = String()
             z = String()
+            data_source = Instance(ColumnDataSource)
 
+            __implementation__ = """
+            import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
+            import {ColumnDataSource} from "models/sources/column_data_source"
+            import * as p from "core/properties"
+
+            declare namespace vis {
+                class Graph3d {
+                    constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
+                    setData(data: vis.DataSet): void
+                }
+
+                class DataSet {
+                    add(data: unknown): void
+                }
+            }
+
+            const OPTIONS = {
+                style: 'surface',
+                showPerspective: true,
+                showGrid: true,
+                keepAspectRatio: true,
+                verticalRatio: 1.0,
+                cameraPosition: {
+                    horizontal: -0.35,
+                    vertical: 0.22,
+                    distance: 1.8,
+                },
+            }
+
+            export class Surface3dView extends LayoutDOMView {
+                model: Surface3d
+
+                private _graph: vis.Graph3d
+
+                initialize(): void {
+                    super.initialize()
+
+                    const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
+                    const script = document.createElement("script")
+                    script.onload = () => this._init()
+                    script.async = false
+                    script.src = url
+                    document.head.appendChild(script)
+                }
+
+                _init(): void {
+                    this._graph = new vis.Graph3d(this.el, this.model.data_source.data, OPTIONS)
+
+                    this.connect(this.model.data_source.change, () => {
+                        this._graph.setData(this.model.data_source.data)
+                    })
+                }
+            }
+
+            export namespace Surface3d {
+                export type Attrs = p.AttrsOf<Props>
+
+                export type Props = LayoutDOM.Props & {
+                    x: p.Property<string>
+                    y: p.Property<string>
+                    z: p.Property<string>
+                    data_source: p.Property<ColumnDataSource>
+                }
+            }
+
+            export interface Surface3d extends Surface3d.Attrs {}
+
+            export class Surface3d extends LayoutDOM {
+                properties: Surface3d.Props
+                __view_type__: Surface3dView
+
+                constructor(attrs?: Partial<Surface3d.Attrs>) {
+                    super(attrs)
+                }
+
+                static __name__ = "Surface3d"
+
+                static {
+                    this.prototype.default_view = Surface3dView
+
+                    this.define<Surface3d.Props>(({String, Ref}) => ({
+                        x: [ String ],
+                        y: [ String ],
+                        z: [ String ],
+                        data_source: [ Ref(ColumnDataSource) ],
+                    }))
+                }
+            }
+            """
 
         x = np.arange(0, 300, 10)
         y = np.arange(0, 300, 10)
-
         xx, yy = np.meshgrid(x, y)
         xx = xx.ravel()
         yy = yy.ravel()
-
         value = np.sin(xx / 50) * np.cos(yy / 50) * 50 + 50
 
         source = ColumnDataSource(data=dict(x=xx, y=yy, z=value))
 
-        p = Surface3d(x="x", y="y", z="z", 
-                            data_source=source, 
-                            # width=680, 
-                            # height=600
-                            )
+        p = Surface3d(x="x", y="y", z="z", data_source=source)
+
      
     elif chart_type == 7:
         x, y = np.meshgrid(np.linspace(0, 3, 40), np.linspace(0, 2, 30))
@@ -344,6 +469,7 @@ def generate_bokeh_chart(chart_type,table_data=None,time=None):
         p = figure(
         #     width=550, 
         # height=300,
+        title = "Contour plot",
         toolbar_location=None, tools="",
          x_range=(0, 3), y_range=(0, 2))
 
@@ -463,6 +589,7 @@ def generate_bokeh_chart(chart_type,table_data=None,time=None):
         p = violin(data=dataframe['life_exp'],
                     title="Violin example",
                     y_axis_label="Age at death")
+                    
     elif chart_type == 10:
         num_points = 300
 
