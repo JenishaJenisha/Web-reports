@@ -23,6 +23,8 @@ import { setCreatedAt ,setTempCharts,setTemplatedetailtextboxes,setTemplatedetai
   setIsSaveasTemplate,updateSaveasTemplateById
 } from "../../Store/slices/TemplateSlice/templateslice";
 import {setReportName,setReportId,setReports,setIsReportModalOpen} from '../../Store/slices/ReportSlice/reportslice';
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
+
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const {Header} = Layout;
 
@@ -316,7 +318,7 @@ useEffect(()=>{
         
         try {
           // console.log("Sending chart type:", item.chartType);
-          const response = await fetch("http://localhost:5000/generate_chart", {
+          const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

@@ -1,3 +1,4 @@
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../Config/config";
 // Action types
 export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
 export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
@@ -15,7 +16,7 @@ export const fetchDataFailure = (error) => ({
 export const fetchChartData = (chartType, chartData) => {
   return async (dispatch) => {
     try {
-      const response = await fetch("http://localhost:5000/generate_chart", {
+      const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

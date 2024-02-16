@@ -24,7 +24,7 @@ function App() {
     <>
     
     <Routes>
-    <Route path="/" element={<TemplateList/>}/>
+    <Route path="/" element={<Login/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/spreadsheet" element={<SpreadSheet/>}/> 
@@ -35,8 +35,8 @@ function App() {
       <Route path="/pdf" element={<Pdf/>}/>
       <Route path="/table" element={<TableControl/>}/>
       <Route path="/template/:templateName/:templateId" element={<Templates/>} />
-      <Route path="/templatelist/template/:templateName/:templateId" element={<Templates/>}/>
-      <Route path="/templatelist" element={<TemplateList/>}/>
+      <Route path="/dashboardtemplate/template/:templateName/:templateId" element={<Templates/>}/>
+      <Route path="/dashboardtemplate" element={<TemplateList/>}/>
       <Route path='/templatecards' element={<Templatecards/>}/>
       <Route path='/Schedulereportlist' element={<Schedulereportlist/>}/>
       <Route path="/AddReportSchedulermodel" element={<AddReportSchedulermodel/>}/>

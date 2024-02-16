@@ -43,10 +43,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api":"cd pythonbokeh && flask run --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test-api":"cd pythonbokeh && flask test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -66,6 +64,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy":"http://localhost:5000"
+  }
 }

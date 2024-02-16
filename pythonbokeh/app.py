@@ -43,7 +43,7 @@ from bokeh.models import Arrow, VeeHead, HTMLTemplateFormatter
 from icecream import ic 
 from bokeh.models import Button
 import bokeh.sampledata
-bokeh.sampledata.download()
+# bokeh.sampledata.download()
 app = Flask(__name__)
 CORS(app) 
 # ic.disable() 
@@ -53,6 +53,16 @@ app.secret_key = 'your_secret_key'
 @app.route('/')
 def welcome():
     return "Python bokeh charts flask api"
+# @app.route("/getToken",methods =["GET"])
+# def getToken():
+#     global token
+#     ic(token)
+#     token = request.headers.get('Authorization').split(' ')[1]
+#     response = jsonify({'message': 'Success'})
+#     response.headers['Authorization'] = f'Bearer {token}'
+#     return token
+
+
 @app.route('/generate_chart', methods=['GET','POST'])
 
 
@@ -61,13 +71,14 @@ def generate_chart():
 
     try:
         if request.method == 'POST':
+            token = request.headers.get('Authorization').split(' ')[1]
             data = request.get_json()
             chart_type = data.get('chartType')
             ic(chart_type)
             if chart_type in valid_chart_types:
                 if chart_type == 13:
                    
-                    table_data = fetch_table_data() 
+                    table_data = fetch_table_data(token) 
                     # add_tabledata = add_data()   
                     # merged_data = merge_datasets(table_data, add_tabledata)
                     ic(table_data)
@@ -87,9 +98,9 @@ def generate_chart():
             return jsonify({'error': 'Method not allowed.'}), 405
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-def fetch_table_data():
+def fetch_table_data(token):
     try:
-        headers = {"Authorization": "Bearer zp9I2aQdY8p8hNmBBoIl547TPCWATzigoFNnI4Vi9ozCQbmFVzDOrJqEKrfYgZ31rpKOTgoH7obli6x45m2Jiz3qpQQ50xloIN2relKm2dZdwatt3kxUiC9pxi26hgzVPX3fYi9mpa47A3OHNNmlKgo9eymEFlKeOa5i14RTCLzftK0Hxhz6XNU7o0DJrH56H9RLhLsRUYjfyrmgMRTCut4uBlDiEroa4cVyy3fS8bc4KMUps5KO6rk2X4IJL6r4kGseAt5M7YOvCecxipl-JYxWdGwsIDMucvWUQiyq-fhx4m5x0a1ygK2AfKgJdvXTUKvAb26FFf6QA7x3cyXeZg"}
+        headers = {"Authorization": f"Bearer {token}"}
         # response = requests.get("http://restapi.adequateshop.com/api/Tourist?page=2")
         response = requests.get("http://192.168.29.111:1220/api/GetOPCValuesByTagsTime?TagNames=10FIC01/PV.CV&UTCTimes=1", headers=headers)
        

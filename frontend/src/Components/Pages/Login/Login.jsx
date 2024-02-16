@@ -1,17 +1,66 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
-import './Login.scss'
-const onFinish = (values) => {
-//   console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-//   console.log('Failed:', errorInfo);
-};
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {setLoginuser} from "../../Store//slices/LoginSlice/loginslice";
+import './Login.scss';
+
+import axios from 'axios';
+import qs from 'qs';
+import { LOGIN_API_BASE_URL,LOGIN_API_ENDPOINTS } from '../../Config/config';
 const Login = () => {
+    const dispatch= useDispatch();
+    const navigate = useNavigate();
+    const onFinish = async (values) => {
+        try {
+            const { UserName, Password } = values;
+            const requestData = {
+                UserName,
+                Password,
+                grant_type: 'password'
+            };
+            const requestDataEncoded = qs.stringify(requestData);
+            const config = {
+                method: LOGIN_API_ENDPOINTS.login.method,
+                url: `${LOGIN_API_BASE_URL}${LOGIN_API_ENDPOINTS.login.url}`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                data: requestDataEncoded,
+            };
+            const response = await axios.request(config);
+            if (response.status === 200) {
+                const data = response.data;
+                const token = data.access_token;
+                localStorage.setItem('token', token);
+                dispatch(setLoginuser(values));
+                console.log('Login successful');
+                if(UserName === 'admin'&& Password === "admin@123"){
+                    navigate('/dashboardtemplate');
+                }
+                
+            } else {
+                const responseData = await response.json();
+                const { error, error_description } = responseData;
+                if (error === 'invalid_grant') {
+                    console.error('Invalid username or password. Please try again.');
+                } else {
+                    console.error('An error occurred during login:', error_description);
+                }
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
+    };
+        const onFinishFailed = (errorInfo) => {
+            console.error('Form validation failed:', errorInfo);
+        };
 return(
     <>
-    <div className='bg'>
-    <div className='LoginForm'>
+    {/* <div className='bg'>
+    <div className='LoginForm'> */}
+    <div className="login-page"> 
+            <div className="login-form-container">
     <Form
         name="basic"
         labelCol={{
@@ -30,12 +79,10 @@ return(
         onFinishFailed={onFinishFailed}
         autoComplete="off"
     > 
-    <Form.Item name="Login">
-        <h1 className='loginheader'>Login</h1>
-    </Form.Item>
+    <h1 className='loginheader'>Login</h1>
         <Form.Item
-        label="Username"
-        name="username"
+        label="UserName"
+        name="UserName"
         rules={[
             {
             required: true,
@@ -48,7 +95,7 @@ return(
 
         <Form.Item
         label="Password"
-        name="password"
+        name="Password"
         rules={[
             {
             required: true,
@@ -59,7 +106,7 @@ return(
         <Input.Password size="large"/>
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
         name="remember"
         valuePropName="checked"
         wrapperCol={{
@@ -68,7 +115,7 @@ return(
         }}
         >
         <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
         wrapperCol={{

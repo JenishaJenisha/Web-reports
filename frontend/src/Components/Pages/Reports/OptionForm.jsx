@@ -3,6 +3,8 @@ import { Button, Checkbox, Form, Input, Radio, Drawer, Select, TimePicker,DatePi
 import {SwapOutlined} from '@ant-design/icons';
 import {setSwapColumn} from '../../Store/slices/ReportSlice/reportslice';
 import { useDispatch,useSelector } from 'react-redux';
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
+
 const OptionForm = () => {
   const dispatch = useDispatch();
   const swapColumn = useSelector((state)=>state.reports.swapColumn)
@@ -28,7 +30,7 @@ const OptionForm = () => {
       };
       const handleSwapColumnsChange = async () => {
         try {
-            const response = await fetch('http://localhost:5000/swapColumns', {
+            const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.swapColumn.url}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -2123,3 +2123,15 @@ RuntimeError: bokeh sample data directory does not exist, please execute bokeh.s
 2024-02-14 18:56:04.453849: wfastcgi.py 3.0.0 closed
 2024-02-14 18:57:30.630317: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
 2024-02-14 18:57:30.634096: wfastcgi.py 3.0.0 initialized
+2024-02-15 10:25:57.439796: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 10:25:57.441806: wfastcgi.py 3.0.0 initialized
+2024-02-15 10:39:09.848537: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 10:39:09.856692: wfastcgi.py 3.0.0 initialized
+2024-02-15 10:48:29.107236: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 10:48:29.115192: wfastcgi.py 3.0.0 initialized
+2024-02-15 17:46:07.441629: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 17:46:07.445903: wfastcgi.py 3.0.0 initialized
+2024-02-15 17:56:56.719204: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 17:56:56.721101: wfastcgi.py 3.0.0 initialized
+2024-02-15 17:57:01.771472: wfastcgi.py will restart when files in D:\Jeni web reports\SAMA_Web_Reporter\pythonbokeh\ are changed: .*((\.py)|(\.config))$
+2024-02-15 17:57:01.776446: wfastcgi.py 3.0.0 initialized

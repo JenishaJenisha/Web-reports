@@ -22,6 +22,7 @@ import { setFooterTextboxes,setHeaderTextboxes,setDroppedLabels,setDroppedLogos,
 import { setTemplate,} from "../../Store/slices/TemplateSlice/templateslice";
 import '../Dashboard/dashboard.scss';
 import { setTableData } from "../../Store/slices/ReportSlice/reportslice";
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 // const generatePDF = () => {
@@ -254,11 +255,14 @@ const generateUniqueId = () => {
   
       if (item.chartType !== 14 && item.chartType !== 15 && item.chartType !== 16 && item.chartType !== 17) {
         try {
+          const token = localStorage.getItem('token');
+          const endpoint = BOKEH_SERVER_URL_ENDPOINTS.generatechart;
           // console.log("Sending chart type:", item.chartType);
-          const response = await fetch("http://localhost:5000/generate_chart", {
-            method: "POST",
+          const response = await fetch(`${BOKEH_SERVER_URL}${endpoint.url}`, {
+            method: endpoint.method.includes('POST') ? 'POST' : 'GET',
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({                                                                  
               chartType: item.chartType,

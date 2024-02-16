@@ -14,7 +14,7 @@ import boldicon from '../../../Assets/ConditionalIcons/Boldicon.svg';
 import italicicon from '../../../Assets/ConditionalIcons/Italicicon.svg';
 import underlineicon from '../../../Assets/ConditionalIcons/underlineicon.svg';
 import axios from 'axios';
-
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS} from '../../Config/config';
 export const ConditionalForm=({ id,initialValues,onFinish})=>{
   
   const [selectedCondition, setSelectedCondition] = useState(null);
@@ -102,7 +102,7 @@ const handleFormattingfieldChange = async (formatconditions) => {
     "tabledata":tabledata,
   }
   try {
-      const response = await fetch('http://localhost:5000/formatconditions', {
+      const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.formatconditions.url}`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ const [selectedBgColor,setSelectedBgColor] = useState();
     setSelectedColor(setColor);
     // console.log(color.toString(),color.toRgbString(),"selectedColor string>>>")
     try {
-      const response = await fetch('http://localhost:5000/update_table_lettercolor', {
+      const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.updatetableLetterColor.url}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ const handletablebgcolor= async(bgcolor)=>{
       setSelectedBgColor(setbgColor);
       // console.log(bgcolor.toRgbString(),"selectedbgColor string>>>")
       try {
-        const response = await fetch('http://localhost:5000/update_table_bgcolor', {
+        const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.updatetablebgColor.url}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

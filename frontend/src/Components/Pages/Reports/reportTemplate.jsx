@@ -41,6 +41,7 @@ import scheduleicon from "../../../Assets/reportdesignericons/schedule.svg";
 import preview from "../../../Assets/reportdesignericons/preview.svg";
 import ChartbindingForm from "./chartbindingForm";
 import ChartOption from './chartOption';
+import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const { Header } = Layout;
@@ -291,7 +292,7 @@ const ReportTemplates = ({ id, selectedTempReportdetail }) => {
         item.chartType !== 17
       ) {
         try {
-          const response = await fetch("http://localhost:5000/generate_chart", {
+          const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -533,7 +534,7 @@ const name = "werr"; // Removed the second 'var'
   const age = 23; // Removed the second 'var'
 
   try {
-    const response = await fetch('http://localhost:5000/add', {
+    const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.addtag.url}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -544,7 +545,7 @@ const name = "werr"; // Removed the second 'var'
     if (!response.ok) {
       throw new Error('Failed to add on the server');
     }
-    const fetchDataResponse = await fetch('http://localhost:5000/fetch_table_data');
+    const fetchDataResponse = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.fetchdatatable.url}`);
     const fetchData = await fetchDataResponse.json();
 
     console.log('Updated data:', fetchData.data);
