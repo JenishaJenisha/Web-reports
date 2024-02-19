@@ -362,7 +362,9 @@ dispatch(setTagModalOpen(true))
             <Input type="number" disabled={!isTagmaster} />
           </Form.Item>
           {/* <Durationcontent/> */}
-          <Form.Item disabled={!ishistorical} name="historicalform">
+          {/* <Form.Item disabled={!ishistorical} name="historicalform"> */}
+          {!ishistorical && (   
+            <>
             <Form.Item name="aggregate" label="Aggregate">
               <Select></Select>
             </Form.Item>
@@ -478,7 +480,11 @@ dispatch(setTagModalOpen(true))
                 <Option value="December"></Option>
               </Select>
             </Form.Item>
-          </Form.Item>
+            </>        
+          
+          )}
+ 
+          {/* </Form.Item> */}
         </Form>
       </Modal>
     </>

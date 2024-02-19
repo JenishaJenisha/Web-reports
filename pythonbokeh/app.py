@@ -43,29 +43,19 @@ from bokeh.models import Arrow, VeeHead, HTMLTemplateFormatter
 from icecream import ic 
 from bokeh.models import Button
 import bokeh.sampledata
+from flask import g
+formatting_conditions = {}
 # bokeh.sampledata.download()
 app = Flask(__name__)
 CORS(app) 
-# ic.disable() 
-ic.enable()
+ic.disable() 
+# ic.enable()
 global p
 app.secret_key = 'your_secret_key'
 @app.route('/')
 def welcome():
     return "Python bokeh charts flask api"
-# @app.route("/getToken",methods =["GET"])
-# def getToken():
-#     global token
-#     ic(token)
-#     token = request.headers.get('Authorization').split(' ')[1]
-#     response = jsonify({'message': 'Success'})
-#     response.headers['Authorization'] = f'Bearer {token}'
-#     return token
-
-
 @app.route('/generate_chart', methods=['GET','POST'])
-
-
 def generate_chart():
     valid_chart_types = [2,3,4,5,6,7,8,9,10,11,12,13]  
 
@@ -98,6 +88,7 @@ def generate_chart():
             return jsonify({'error': 'Method not allowed.'}), 405
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 def fetch_table_data(token):
     try:
         headers = {"Authorization": f"Bearer {token}"}
@@ -123,6 +114,120 @@ def fetch_table_data(token):
         return table_data
     except Exception as e:
         print("Error fetching table data:", str(e))
+        return None
+
+def update_chart_with_formatting_conditions(formatting_conditions):
+    try:
+        print(formatting_conditions,"formatting_conditions fromupdate")
+        condition_column = formatting_conditions['formatconditionsList']['conditionColumn']
+        apply_column = formatting_conditions['formatconditionsList']['ApplyColumn']
+        condition_type = formatting_conditions['formatconditionsList']['Condition Type']
+        alias_name = formatting_conditions['formatconditionsList']['aliasName']
+        selected_condition_format = formatting_conditions['valueCondition']['selectedcondtionFormat']
+        conditional_output = formatting_conditions['conditionalOutput']
+
+        # Extracting individual values from conditional_output
+        bold = conditional_output['bold']
+        italic = conditional_output['italic']
+        underline = conditional_output['underline']
+        text_color = conditional_output['textcolor']
+        background_color = conditional_output['backgroundcolor']
+        Condition = formatting_conditions['valueCondition'].get('selectedcondtionFormat')
+        tabledatalist = formatting_conditions.get('tabledata', {})
+        roots_data = tabledatalist.get('doc', {}).get('roots', [])
+        columns_data = roots_data[0].get('attributes', {}).get('columns', [])
+        column_titles = [column.get('attributes', {}).get('title') for column in columns_data]
+        doc = tabledatalist.get("doc", {})
+         # Print the extracted values
+        print('Condition Column:', condition_column)
+        print('Apply Column:', apply_column)
+        print('Condition Type:', condition_type)
+        print('Alias Name:', alias_name)
+        print('Selected Condition Format:', selected_condition_format)
+        print('Bold:', bold)
+        print('Italic:', italic)
+        print('Underline:', underline)
+        print('Text Color:', text_color)
+        print('Background Color:', background_color)
+        if(condition_type == 1):
+            # print(Condition,textFormatbold,">>>>>>>selectedCondition func val Condition Type>>>>>>>>>>>>")
+            if(Condition == 'equalTo'):
+                if(textFormatbold == True):
+                    selected_entry["font"] = 'bold'
+                    ic(selected_entry['font'])
+                    
+                elif(textformatItalic == True):
+                    pass
+                elif (textformatunderline == True):
+                    pass
+                elif(textformatlettercolor == True):
+                    pass
+                elif(textformatbgcolor == True):
+                    pass
+            elif(Condition == 'notEmpty'):
+                if(bold == True):
+                #  selected_entry()
+                    print("not empty condition bold text")
+                elif(italic == True):
+                    pass
+                elif (underline == True):
+                    pass
+                elif(text_color == True):
+                    pass
+                elif(background_color == True):
+                    pass
+            elif(Condition == 'greaterThan'):
+                if(bold == True):
+                #  selected_entry()
+                    pass
+                elif(italic == True):
+                    pass
+                elif (underline == True):
+                    pass
+                elif(text_color == True):
+                    pass
+                elif(background_color == True):
+                    pass
+            elif(Condition == 'lessThan'):
+                if(bold == True):
+                #  selected_entry()
+                    pass
+                elif(italic == True):
+                    pass
+                elif (underline == True):
+                    pass
+                elif(text_color == True):
+                    pass
+                elif(background_color == True):
+                    pass
+        if condition_column == apply_column:
+            print("Values of conditionColumn and applyColumn are the same")
+            
+        elif(condition_column != 'none'):
+            print("Not a empty value")
+
+        if roots:
+            first_root = roots[0]
+            attributes = first_root.get("attributes", {})
+            source = attributes.get("source", {})
+            source_attributes = source.get("attributes", {})  
+            data = source_attributes.get("data", {})
+            entries = data.get("entries", [])
+
+                    # Find the entry with the key matching "apply_column_value"
+            selected_entry = next((entry[1]["array"] for entry in entries if entry[0] == apply_column_value), [])
+        # print(tabledatalist,"tabledatalist")
+        # print(roots_data,"roots_data")
+        # print(columns_data,"columns_data")
+        # print(column_titles,"column_titles")
+        # print(doc,"doc")
+       
+       
+        # Example: updated_chart = apply_formatting_conditions_to_chart(initial_chart, formatting_conditions)
+
+        # Return the updated chart
+        return updated_chart
+    except Exception as e:
         return None
 def merge_datasets(table_data, added_data):
     return {**table_data, **added_data}
@@ -224,242 +329,188 @@ def generate_bokeh_chart(chart_type,table_data=None,):
         p.add_tools(hover)
     elif chart_type == 6:
  
-        # p = figure(title="Surface Plot",toolbar_location=None, tools="")
-        # CODE = """
-        # import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
-        # import {ColumnDataSource} from "models/sources/column_data_source"
-        # import * as p from "core/properties"
+        p = figure(title="Surface Plot")
+        CODE = """
+        // This custom model wraps one part of the third-party vis.js library:
+        //
+        //     http://visjs.org/index.html
+        //
+        // Making it easy to hook up python data analytics tools (NumPy, SciPy,
+        // Pandas, etc.) to web presentations using the Bokeh server.
 
-        # declare namespace vis {
-        # class Graph3d {
-        #     constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
-        #     setData(data: vis.DataSet): void
-        # }
+        import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
+        import {ColumnDataSource} from "models/sources/column_data_source"
+        import * as p from "core/properties"
 
-        # class DataSet {
-        #     add(data: unknown): void
-        # }
-        # }
+        declare namespace vis {
+        class Graph3d {
+            constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
+            setData(data: vis.DataSet): void
+        }
 
-        # const OPTIONS = {
-        # # width: '650px',
-        # # height: '600px',
-        # style: 'surface',
-        # showPerspective: true,
-        # showGrid: true,
-        # keepAspectRatio: true,
-        # verticalRatio: 1.0,
-        # cameraPosition: {
-        #     horizontal: -0.35,
-        #     vertical: 0.22,
-        #     distance: 1.8,
-        # },
-        # }
+        class DataSet {
+            add(data: unknown): void
+        }
+        }
 
-        # export class Surface3dView extends LayoutDOMView {
-        # declare model: Surface3d
+        // This defines some default options for the Graph3d feature of vis.js
+        // See: http://visjs.org/graph3d_examples.html for more details.
+        const OPTIONS = {
+        width: '600px',
+        height: '600px',
+        style: 'surface',
+        showPerspective: true,
+        showGrid: true,
+        keepAspectRatio: true,
+        verticalRatio: 1.0,
+        legendLabel: 'stuff',
+        cameraPosition: {
+            horizontal: -0.35,
+            vertical: 0.22,
+            distance: 1.8,
+        },
+        }
+        // To create custom model extensions that will render on to the HTML canvas
+        // or into the DOM, we must create a View subclass for the model.
+        //
+        // In this case we will subclass from the existing BokehJS ``LayoutDOMView``
+        export class Surface3dView extends LayoutDOMView {
+        declare model: Surface3d
 
-        # private _graph: vis.Graph3d
+        private _graph: vis.Graph3d
 
-        # initialize(): void {
-        #     super.initialize()
+        initialize(): void {
+            super.initialize()
 
-        #     const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
-        #     const script = document.createElement("script")
-        #     script.onload = () => this._init()
-        #     script.async = false
-        #     script.src = url
-        #     document.head.appendChild(script)
-        # }
+            const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
+            const script = document.createElement("script")
+            script.onload = () => this._init()
+            script.async = false
+            script.src = url
+            document.head.appendChild(script)
+        }
 
-        # private _init(): void {
+        private _init(): void {
+            // Create a new Graph3s using the vis.js API. This assumes the vis.js has
+            // already been loaded (e.g. in a custom app template). In the future Bokeh
+            // models will be able to specify and load external scripts automatically.
+            //
+            // BokehJS Views create <div> elements by default, accessible as this.el.
+            // Many Bokeh views ignore this default <div>, and instead do things like
+            // draw to the HTML canvas. In this case though, we use the <div> to attach
+            // a Graph3d to the DOM.
+            this._graph = new vis.Graph3d(this.shadow_el, this.get_data(), OPTIONS)
 
-        #     this._graph = new vis.Graph3d(this.shadow_el, this.get_data(), OPTIONS)
+            // Set a listener so that when the Bokeh data source has a change
+            // event, we can process the new data
+            this.connect(this.model.data_source.change, () => {
+            this._graph.setData(this.get_data())
+            })
+        }
 
-        #     this.connect(this.model.data_source.change, () => {
-        #     this._graph.setData(this.get_data())
-        #     })
-        # }
+        // This is the callback executed when the Bokeh data has an change. Its basic
+        // function is to adapt the Bokeh data source to the vis.js DataSet format.
+        get_data(): vis.DataSet {
+            const data = new vis.DataSet()
+            const source = this.model.data_source
+            for (let i = 0; i < source.get_length()!; i++) {
+            data.add({
+                x: source.data[this.model.x][i],
+                y: source.data[this.model.y][i],
+                z: source.data[this.model.z][i],
+            })
+            }
+            return data
+        }
 
-        # get_data(): vis.DataSet {
-        #     const data = new vis.DataSet()
-        #     const source = this.model.data_source
-        #     for (let i = 0; i < source.get_length()!; i++) {
-        #     data.add({
-        #         x: source.data[this.model.x][i],
-        #         y: source.data[this.model.y][i],
-        #         z: source.data[this.model.z][i],
-        #     })
-        #     }
-        #     return data
-        # }
+        get child_models(): LayoutDOM[] {
+            return []
+        }
+        }
 
-        # get child_models(): LayoutDOM[] {
-        #     return []
-        # }
-        # }
+        // We must also create a corresponding JavaScript BokehJS model subclass to
+        // correspond to the python Bokeh model subclass. In this case, since we want
+        // an element that can position itself in the DOM according to a Bokeh layout,
+        // we subclass from ``LayoutDOM``
+        export namespace Surface3d {
+        export type Attrs = p.AttrsOf<Props>
 
-        # export namespace Surface3d {
-        # export type Attrs = p.AttrsOf<Props>
+        export type Props = LayoutDOM.Props & {
+            x: p.Property<string>
+            y: p.Property<string>
+            z: p.Property<string>
+            data_source: p.Property<ColumnDataSource>
+        }
+        }
 
-        # export type Props = LayoutDOM.Props & {
-        #     x: p.Property<string>
-        #     y: p.Property<string>
-        #     z: p.Property<string>
-        #     data_source: p.Property<ColumnDataSource>
-        # }
-        # }
+        export interface Surface3d extends Surface3d.Attrs {}
 
-        # export interface Surface3d extends Surface3d.Attrs {}
+        export class Surface3d extends LayoutDOM {
+        declare properties: Surface3d.Props
+        declare __view_type__: Surface3dView
 
-        # export class Surface3d extends LayoutDOM {
-        # declare properties: Surface3d.Props
-        # declare __view_type__: Surface3dView
+        constructor(attrs?: Partial<Surface3d.Attrs>) {
+            super(attrs)
+        }
 
-        # constructor(attrs?: Partial<Surface3d.Attrs>) {
-        #     super(attrs)
-        # }
+        // The ``__name__`` class attribute should generally match exactly the name
+        // of the corresponding Python class. Note that if using TypeScript, this
+        // will be automatically filled in during compilation, so except in some
+        // special cases, this shouldn't be generally included manually, to avoid
+        // typos, which would prohibit serialization/deserialization of this model.
+        static __name__ = "Surface3d"
 
-        # static __name__ = "Surface3d"
+        static {
+            // This is usually boilerplate. In some cases there may not be a view.
+            this.prototype.default_view = Surface3dView
 
-        # static {
-            
-        #     this.prototype.default_view = Surface3dView
+            // The @define block adds corresponding "properties" to the JS model. These
+            // should basically line up 1-1 with the Python model class. Most property
+            // types have counterparts, e.g. ``bokeh.core.properties.String`` will be
+            // ``String`` in the JS implementatin. Where the JS type system is not yet
+            // as rich, you can use ``p.Any`` as a "wildcard" property type.
+            this.define<Surface3d.Props>(({String, Ref}) => ({
+            x:            [ String ],
+            y:            [ String ],
+            z:            [ String ],
+            data_source:  [ Ref(ColumnDataSource) ],
+            }))
+        }
+        }
+        """
 
-
-        #     this.define<Surface3d.Props>(({String, Ref}) => ({
-        #     x:[ String ],
-        #     y:[ String ],
-        #     z:[ String ],
-        #     data_source:[Ref(ColumnDataSource)],
-        #     }))
-        # }
-        # }
-        # """
-
-        # class Surface3d(LayoutDOM):
-
-        #     __implementation__ = TypeScript(CODE)
-
-        #     data_source = Instance(ColumnDataSource)
-
-        #     x = String()
-        #     y = String()
-        #     z = String()
-
-
-        # x = np.arange(0, 300, 10)
-        # y = np.arange(0, 300, 10)
-
-        # xx, yy = np.meshgrid(x, y)
-        # xx = xx.ravel()
-        # yy = yy.ravel()
-
-        # value = np.sin(xx / 50) * np.cos(yy / 50) * 50 + 50
-
-        # source = ColumnDataSource(data=dict(x=xx, y=yy, z=value))
-
-        # p = Surface3d(x="x", y="y", z="z", 
-        #                     data_source=source, 
-        #                     # width=680, 
-        #                     # height=600
-        #                     )
-
+        # This custom extension model will have a DOM view that should layout-able in
+        # Bokeh layouts, so use ``LayoutDOM`` as the base class. If you wanted to create
+        # a custom tool, you could inherit from ``Tool``, or from ``Glyph`` if you
+        # wanted to create a custom glyph, etc.
         class Surface3d(LayoutDOM):
-            x = String()
-            y = String()
-            z = String()
+
+            # The special class attribute ``__implementation__`` should contain a string
+            # of JavaScript code that implements the browser side of the extension model.
+            __implementation__ = TypeScript(CODE)
+
+            # Below are all the "properties" for this model. Bokeh properties are
+            # class attributes that define the fields (and their types) that can be
+            # communicated automatically between Python and the browser. Properties
+            # also support type validation. More information about properties in
+            # can be found here:
+            #
+            #    https://docs.bokeh.org/en/latest/docs/reference/core/properties.html#bokeh-core-properties
+
+            # This is a Bokeh ColumnDataSource that can be updated in the Bokeh
+            # server by Python code
             data_source = Instance(ColumnDataSource)
 
-            __implementation__ = """
-            import {LayoutDOM, LayoutDOMView} from "models/layouts/layout_dom"
-            import {ColumnDataSource} from "models/sources/column_data_source"
-            import * as p from "core/properties"
+            # The vis.js library that we are wrapping expects data for x, y, and z.
+            # The data will actually be stored in the ColumnDataSource, but these
+            # properties let us specify the *name* of the column that should be
+            # used for each field.
+            x = String()
 
-            declare namespace vis {
-                class Graph3d {
-                    constructor(el: HTMLElement | DocumentFragment, data: object, OPTIONS: object)
-                    setData(data: vis.DataSet): void
-                }
+            y = String()
 
-                class DataSet {
-                    add(data: unknown): void
-                }
-            }
+            z = String()
 
-            const OPTIONS = {
-                style: 'surface',
-                showPerspective: true,
-                showGrid: true,
-                keepAspectRatio: true,
-                verticalRatio: 1.0,
-                cameraPosition: {
-                    horizontal: -0.35,
-                    vertical: 0.22,
-                    distance: 1.8,
-                },
-            }
-
-            export class Surface3dView extends LayoutDOMView {
-                model: Surface3d
-
-                private _graph: vis.Graph3d
-
-                initialize(): void {
-                    super.initialize()
-
-                    const url = "https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"
-                    const script = document.createElement("script")
-                    script.onload = () => this._init()
-                    script.async = false
-                    script.src = url
-                    document.head.appendChild(script)
-                }
-
-                _init(): void {
-                    this._graph = new vis.Graph3d(this.el, this.model.data_source.data, OPTIONS)
-
-                    this.connect(this.model.data_source.change, () => {
-                        this._graph.setData(this.model.data_source.data)
-                    })
-                }
-            }
-
-            export namespace Surface3d {
-                export type Attrs = p.AttrsOf<Props>
-
-                export type Props = LayoutDOM.Props & {
-                    x: p.Property<string>
-                    y: p.Property<string>
-                    z: p.Property<string>
-                    data_source: p.Property<ColumnDataSource>
-                }
-            }
-
-            export interface Surface3d extends Surface3d.Attrs {}
-
-            export class Surface3d extends LayoutDOM {
-                properties: Surface3d.Props
-                __view_type__: Surface3dView
-
-                constructor(attrs?: Partial<Surface3d.Attrs>) {
-                    super(attrs)
-                }
-
-                static __name__ = "Surface3d"
-
-                static {
-                    this.prototype.default_view = Surface3dView
-
-                    this.define<Surface3d.Props>(({String, Ref}) => ({
-                        x: [ String ],
-                        y: [ String ],
-                        z: [ String ],
-                        data_source: [ Ref(ColumnDataSource) ],
-                    }))
-                }
-            }
-            """
 
         x = np.arange(0, 300, 10)
         y = np.arange(0, 300, 10)
@@ -470,9 +521,7 @@ def generate_bokeh_chart(chart_type,table_data=None,):
 
         source = ColumnDataSource(data=dict(x=xx, y=yy, z=value))
 
-        p = Surface3d(x="x", y="y", z="z", data_source=source)
-
-     
+        p = Surface3d(x="x", y="y", z="z", data_source=source, width=600, height=600)
     elif chart_type == 7:
         x, y = np.meshgrid(np.linspace(0, 3, 40), np.linspace(0, 2, 30))
         z = 1.3*np.exp(-2.5*((x-1.3)**2 + (y-0.8)**2)) - 1.2*np.exp(-2*((x-1.8)**2 + (y-1.3)**2))
@@ -687,127 +736,31 @@ def generate_bokeh_chart(chart_type,table_data=None,):
         p.xaxis.axis_label = "Category"
         p.yaxis.axis_label = "Month"
     elif chart_type == 13:
-       
-        # def get_html_formatter(apply_column_value):
-        #     ic(apply_column_value)
-        #     print(apply_column_value,"*&^$#!@#!@@@@@~#@%&")
-        #     template = """
-        #             <div style="background:<%= 
-        #                 (function colorfromint(){
-        #                     if(apply_column_value == condition_column_value){
-        #                         return('#f14e08')}
-        #                     else if (condition_column_value == 'Negative')
-        #                         {return('#8a9f42')}
-        #                     else if (condition_column_value == 'Invalid')
-        #                         {return('#8f6b31')}
-        #                     }()) %>; 
-        #                 color: red"> 
-        #             <%= value %>
-        #             </div>
-        #         """.replace('result_col',apply_column_value)
-                
-        #     return HTMLTemplateFormatter(template=template)
         data_key = 'data'                       # Replace this with the actual key in your dictionary
-        # df = pd.DataFrame(table_data.get(data_key, [])) 
         datalist = json.loads(table_data)
         df = pd.DataFrame(datalist) 
-        # print("Column Names:", list(df.columns))
-        # df = pd.DataFrame('AAPL')
-        # df = pd.read_json('db.json')  
-            # if is_transposed:
-            # # Transpose the DataFrame
-            #     print("fghfghfghfghfghfghfhf")
-            #     df = df.transpose()
-            #     print(df)
-        #transposed_df = df.transpose()
-            # print(transposed_df,"tdt")
-        # ic(transposed_df)
         source = ColumnDataSource(df)
-        # ic(source)
-        # tourist_names = df['tourist_name'].tolist()
-        #     # print("Tourist Names:", tourist_names)
-        # ic(tourist_names)
-
-            # source = ColumnDataSource( transposed_df )
-            # stats = df.describe().reset_index()
-            # source_stats = ColumnDataSource(stats)
-            # for key, value in df.items():
-            #     print(f"Key: {key}, Value: {value}")
-            # columns[1].formatters = [{"bold": True}]
-        # columns = [TableColumn(field=col, title=col,formatter=get_html_formatter()) for col in df.columns]
-       
-        
-        # columns = [TableColumn(field=col, title=col, formatter=HTMLTemplateFormatter(template='<div><u><%= value %></u></div>')) for col in df.columns]
+        template = """
+            <div style="background-color: <%=
+                (function colorfromint(){
+                    if(value >= 30){
+                        return('green')}
+                    else if (value < 30)
+                        {return('red')}
+                    }()) %>;
+                color: white; font-weight: bold;">
+                <%= value %>
+            </div>
+            """
         columns = [
-        TableColumn(field="V", title="Value"),
+        TableColumn(field="V", title="Value",formatter=HTMLTemplateFormatter(template=template)),
         TableColumn(field="U", title="Unit"),
         TableColumn(field="T", title="Tag"),
         TableColumn(field="Q", title="Quality"),
         TableColumn(field="M", title="Description")
             ]
-        # columns = [TableColumn(field=col, title=col,formatter=HTMLTemplateFormatter(template='<u><%= value %></u>')) for col in df.columns]
-            # name = [entry['tourist_name'] for entry in data_key]
-            # print("name>>>>",name)
         p = DataTable(source=source, columns=columns,editable=True,fit_columns=True,selectable=True,index_position=None,sortable=True)
-       
-        # button = Button(label="Click Me!")
 
-        # # Create a CustomJS callback for the Button
-        # js_callback = CustomJS(code="""
-        #     console.log("Button clicked!");
-        #     alert("Button clicked!");
-        # """)
-
-        # # Attach the callback to the Button
-        # button.js_on_click(js_callback)
-        # p = column(p1, button)
-        # def update_bg_color(attr, old, new):
-        #        ic(new)
-        #        if new == 'save_clicked':
-                    
-        #             p.styles({'background': [(0, '#FFD700')]})
-        # # Attach the callback to the DataTable's name property
-        # p.on_change('name', update_bg_color)
-        custom_js_callback = CustomJS(args=dict(source=source), code="""
-        alert("DataTable button clicked!");
-    console.log("Save button clicked! Implement your logic here.");
-    var data = source.data;
-    console.log(data);
-""")
-        p.js_on_event('button_click', custom_js_callback)
-        # add_data(source)
-#         js_callback = CustomJS(args=dict(source=source),code="""
-#                     console.log("JavaScript callback is working!");
-#                 var p = cb_obj ;
-#                 var source = p.source;
-
-#                 // Define the style changes
-#                 var new_styles = {
-#                 'background': '{textformatbgcolor || 'lightblue'}',
-#                         'color': '{textformatlettercolor || 'green'}',
-#                         'font-weight': '{textFormatbold ? 'bold' : 'normal'}',
-#                         'font-style': '{textformatItalic ? 'italic' : 'normal'}',
-#                         'text-decoration': '{textformatunderline ? 'underline' }',
-
-# };
-#                 // Update the styles of the DataTable
-#                 p.styles = new_styles;
-#             """)
-#         # p.js_on_change('change', js_callback)
-#         # p.js_on_event('button_click',js_callback)
-#         p.js_on_event('button_click', CustomJS(code="console.log('Button Clicked!');"))
-        # p.styles = {
-        #         # 'background-color': 'lightblue',
-        #         # 'color': 'green',
-                
-        #         'band_fill_color':'red',
-        #         'font-weight': 'bold' if textFormatbold else 'normal',
-        #         'font-style': 'italic' if textformatItalic else 'normal',
-        #         'text-decoration': 'underline' if textformatunderline else 'none',
-        #         'color': textformatlettercolor if textformatlettercolor else 'green',
-        #         'background-color': textformatbgcolor if textformatbgcolor else 'lightblue'
-        #     }
-        
     chart_json = json_item(p, "my_chart")
     return json.dumps(chart_json) 
 @app.route('/add', methods=['POST'])
@@ -847,6 +800,7 @@ def update_bokeh_data_table(style_message):
 def formatconditions(): 
     try:
         data = request.get_json()
+        global formatting_conditions
         formatconditions = data.get('formatconditions')
         
         # chart_json = json_item(p, "my_chart")
@@ -944,11 +898,13 @@ def formatconditions():
                     pass
         if condition_column_value == apply_column_value:
             print("Values of conditionColumn and applyColumn are the same")
+            
         elif(condition_column_value != 'none'):
             print("Not a empty value")
         # chart_data = generate_bokeh_chart( textFormatbold, textformatItalic,textformatunderline, textformatlettercolor, textformatbgcolor,apply_column_value,condition_column_value,Condition,condition_type_value)
-        
-        return jsonify({'formatconditions':formatconditions}),200
+        chart_json = update_chart_with_formatting_conditions(formatconditions)
+        # return jsonify({'formatconditions':formatconditions}),200
+        return jsonify({'success': True, 'chart': chart_json}), 200
     except Exception as e:
         return jsonify({'error': str(e)}),500
  

@@ -575,7 +575,7 @@ const handleSaveClick=()=>{
               <div className="detailreportruler"  id="detailreportscale">
                 <div className="contentflex">
                   <div className="ruler_left">
-                    {Array.from({ length: 15}).map((_, index5) => (
+                    {Array.from({ length: 55}).map((_, index5) => (
                       <div  key={index5} className="cm" style={{ backgroundColor: "yellow" }}>
                         {Array.from({ length: 9 }).map((_, index) => (
                           <div key={index} className="mm">

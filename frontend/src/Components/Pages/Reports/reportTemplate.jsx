@@ -85,7 +85,8 @@ const ReportTemplates = ({ id, selectedTempReportdetail }) => {
   const [open, setOpen] = useState(false);
   const  reportsbindingdrawer = useSelector((state)=>state.reports);
   const {conditionalFormatingDrawer,settingsdrawerOpen,optiondrawer} =reportsbindingdrawer
-  
+  const formatconditionslist = useSelector((state)=>state.reports.formatconditions);
+  console.log(formatconditionslist,"fcl")
   // console.log(settingsdrawerOpen,"settingsdraweropen")
   useEffect(() => {
     if (selectedTempReportdetail) {
@@ -292,15 +293,18 @@ const ReportTemplates = ({ id, selectedTempReportdetail }) => {
         item.chartType !== 17
       ) {
         try {
-          const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
-            method: "POST",
+          const token = localStorage.getItem('token');
+          const endpoint = BOKEH_SERVER_URL_ENDPOINTS.generatechart;
+          // console.log("Sending chart type:", item.chartType);
+          const response = await fetch(`${BOKEH_SERVER_URL}${endpoint.url}`, {
+            method: endpoint.method.includes('POST') ? 'POST' : 'GET',
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({
               chartType: item.chartType,
               chartData: item.chartData,
-              
               // chartId: item.chartId
             
             }),

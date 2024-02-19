@@ -285,7 +285,7 @@ const savereport = () => {
                        // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
                       //  cols={{ lg: 6, md: 6, sm: 4, xs: 2, xxs: 1 }}
                       cols={{lg:1,md:1,sm:1,xs:1,xxs:1}}
-                      rowHeight={300}
+                      rowHeight={800}
                        isDraggable
                        isRearrangeable
                        isResizable

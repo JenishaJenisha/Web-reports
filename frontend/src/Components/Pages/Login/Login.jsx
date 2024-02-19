@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {setLoginuser} from "../../Store//slices/LoginSlice/loginslice";
@@ -36,7 +36,11 @@ const Login = () => {
                 dispatch(setLoginuser(values));
                 console.log('Login successful');
                 if(UserName === 'admin'&& Password === "admin@123"){
+                    // message.success("Login Successfully")
                     navigate('/dashboardtemplate');
+                }
+                else{
+                    message.error("Invalid UserName/Password")
                 }
                 
             } else {
@@ -63,15 +67,14 @@ return(
             <div className="login-form-container">
     <Form
         name="basic"
+        layout="vertical"
         labelCol={{
-        span: 8,
+        span: 12,
         }}
         wrapperCol={{
-        span: 16,
+        span: 24,
         }}
-        style={{
-        maxWidth: 600,
-        }}
+       
         initialValues={{
         remember: true,
         }}

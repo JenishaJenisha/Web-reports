@@ -13,7 +13,6 @@ import painticon from '../../../Assets/ConditionalIcons/painticon.svg';
 import boldicon from '../../../Assets/ConditionalIcons/Boldicon.svg';
 import italicicon from '../../../Assets/ConditionalIcons/Italicicon.svg';
 import underlineicon from '../../../Assets/ConditionalIcons/underlineicon.svg';
-import axios from 'axios';
 import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS} from '../../Config/config';
 export const ConditionalForm=({ id,initialValues,onFinish})=>{
   
@@ -55,29 +54,6 @@ const {tabledata,tableTextFormat} = reporttable
     console.log(selectedCondition,"selectedCondition")
     setSelectedCondition(condition)
       setPopoverVisible(false);
-      
-      // try {
-      //   const response = await fetch('http://localhost:5000/valueCondition', {
-      //       method: 'POST',
-      //       headers: {
-      //           'Content-Type': 'application/json',
-      //       },
-      //       body: JSON.stringify({ selectedCondition: condition}),
-      //   });
-  
-      //   if (!response.ok) {
-      //       // Handle server error
-      //       throw new Error('Server error');
-      //   }
-  
-      //   const data = await response.json();
-  
-      //   // Handle the response from the server if needed
-  
-      //   console.log('Server response selectedCondition:', data);
-      // } catch (error) {
-      //   console.error('Error:', error.message);
-      // } 
     };
 const handleConditions=()=>{
   form
@@ -86,13 +62,12 @@ const handleConditions=()=>{
             form.resetFields();
             dispatch(setFormatConditions(values))
             handleFormattingfieldChange(values)
-            // console.log(values)
           })
           .catch((info) => {
             console.log('Validate Failed:', info);
           });
            
-}
+        }
 
 const handleFormattingfieldChange = async (formatconditions) => {
   const condition={
@@ -111,26 +86,13 @@ const handleFormattingfieldChange = async (formatconditions) => {
       });
 
       if (!response.ok) {
-          // Handle server error
           throw new Error('Server error');
       }
-
       const data = await response.json();
-
-      // Handle the response from the server if needed
-
-      // console.log('Server response:', data);
       return data;
   } catch (error) {
       console.error('Error:', error.message);
   }
-  // axios.post('http://localhost:50000/formatconditions', 'save_clicked')
-  //         .then(response => {
-  //             console.log(response.data,"***res data");
-  //         })  
-  //         .catch(error => {
-  //             console.error('Error sending request:', error);
-  //         });        
 };
 
 const Textformatingcontent=()=>{
@@ -153,48 +115,19 @@ const toggleIcon = (icon) => {
       ...prevIcons,
       [icon]: !prevIcons[icon],
     };
-
-    // Call handleFormChange with the updated icons
     handleFormChange(updatedIcons);
 
     return updatedIcons;
   });
-  // console.log(selectedIcons, "selectedicons");
 };
-// const formatconditionslist = useSelector((state)=>state.reports.formatconditions);
-// console.log(formatconditionslist,"formatconditionslistformatconditionslistformatconditionslist")
 const handleFormChange = async (selectedIcons) => {
   dispatch(setTableTextFormat(selectedIcons))
-  // try {
-  //     const response = await fetch('http://localhost:5000/update_tableTextFormat', {
-  //         method: 'POST',
-  //         headers: {
-  //             'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({ selectedStyle: selectedIcons}),
-  //     });
-
-  //     if (!response.ok) {
-  //         // Handle server error
-  //         throw new Error('Server error');
-  //     }
-
-  //     const data = await response.json();
-
-  //     // Handle the response from the server if needed
-
-  //     // console.log('Server response:', data);
-  // } catch (error) {
-  //     console.error('Error:', error.message);
-  // }
 };
 const [selectedColor, setSelectedColor] = useState(''); 
 const [selectedBgColor,setSelectedBgColor] = useState();
-// console.log(selectedColor,"selectedColor")
   const handleColorChange =async (color) => {
      const setColor = color.toRgbString()
     setSelectedColor(setColor);
-    // console.log(color.toString(),color.toRgbString(),"selectedColor string>>>")
     try {
       const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.updatetableLetterColor.url}`, {
         method: 'POST',
@@ -207,8 +140,6 @@ const [selectedBgColor,setSelectedBgColor] = useState();
       if (!response.ok) {
         throw new Error('Failed to update color on the server');
       }
-
-      // console.log('Color updated successfully');
     } catch (error) {
       console.error('Error updating color on the server:', error);
     }
@@ -216,7 +147,6 @@ const [selectedBgColor,setSelectedBgColor] = useState();
 const handletablebgcolor= async(bgcolor)=>{
       const setbgColor = bgcolor.toRgbString()
       setSelectedBgColor(setbgColor);
-      // console.log(bgcolor.toRgbString(),"selectedbgColor string>>>")
       try {
         const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.updatetablebgColor.url}`, {
           method: 'POST',
@@ -229,8 +159,6 @@ const handletablebgcolor= async(bgcolor)=>{
         if (!response.ok) {
           throw new Error('Failed to update color on the server');
         }
-  
-        // console.log('Color updated successfully');
       } catch (error) {
         console.error('Error updating color on the server:', error);
       }
@@ -446,8 +374,6 @@ const ConditionalFormattingForm = () => {
   const formatconditionslist = useSelector((state)=>state.reports.formatconditions);
   const editformatcondition = useSelector((state)=>state.reports.editformatcondition);
   const dispatch = useDispatch()
-  // console.log(formatconditionslist,"formatconditionslist")
-  
       const formItemLayoutWithOutLabel = {
         wrapperCol: {
           xs: {
@@ -467,13 +393,11 @@ const ConditionalFormattingForm = () => {
      
       const handledeletecondition=(index)=>{
         dispatch(setDeleteformatcondition(index))
-        // console.log(index,"condition deleted")
       }
       const handleEditCondition=(index)=>{
         const conditionsByIndex = formatconditionslist[index];
         console.log(conditionsByIndex,"conditionsByIndex");
         dispatch(setFormatConditionEdit(conditionsByIndex))
-        // dispatch(setFormatConditionEdit({index,conditionsByIndex}))
         console.log(index," edit condition index");
       }
       
@@ -520,7 +444,7 @@ const ConditionalFormattingForm = () => {
                 
                 return(
                   <>
-                  <div key={index} className='conditionlist'>
+                  <div key={index+1} className='conditionlist'>
                     <div>{`Format condition ${index + 1}`} </div>
                     <div className='editcondition'>
                       <Popover placement='right'  content={<ConditionalForm initialValues={editformatcondition}  />} trigger="click" title="Edit Conditional Formatting">
