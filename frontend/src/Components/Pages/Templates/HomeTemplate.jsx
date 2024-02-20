@@ -7,7 +7,7 @@ import {
   FolderViewOutlined,
   HddOutlined
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu,Popover,Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setGeneratereportcomponent,
@@ -34,10 +34,14 @@ import Reports from "../Reports/Reports.jsx";
 import ExistingReports from "../Reports/existingReports.jsx";
 import ReportViewer from "../ReportViewer/reportViewer.jsx";
 import Dataset from "../Dataset/dataset.jsx"
+import usericon  from "../../../Assets/images/user.svg";
+import { useNavigate } from "react-router-dom";
+import Home from "../Dashboard/Home.jsx";
 const { Content, Sider, Header, Footer } = Layout;
 const TemplateList = () => {
   const dispatch = useDispatch();
   const componentpage = useSelector((state) => state.templates);
+  const navigate = useNavigate()
   const {
     generatereportcomponent,
     spreadSheatComponent,
@@ -165,6 +169,7 @@ const TemplateList = () => {
     dispatch(setDatasetComponent(true));
 
  }
+ 
  const menuItems = [
   {
     key: "home",
@@ -209,12 +214,21 @@ const TemplateList = () => {
     label: "Data Set"
   }
 ];
-
+const handleLogout = () => {
+  // Log out user by removing token from localStorage
+  localStorage.removeItem('token');
+  navigate('/login');
+};
   return (
     <>
       <Layout>
         <Header className="homeHeader">
-          <h2>Reports -Supra Controls Pvt.Ltd</h2>
+          <h2 className="homeheaderContent">Reports -Supra Controls Pvt.Ltd</h2>
+          <div className="logoutdiv" onClick={handleLogout}>
+          
+            <img src={usericon} alt="user"></img>
+            <h4 className="logoutstyle">Logout</h4>
+          </div>
         </Header>
       </Layout>
 
@@ -228,7 +242,7 @@ const TemplateList = () => {
   theme="dark"
   mode="inline"
   className="sidermenulist"
-  defaultSelectedKeys={["home"]}
+  // defaultSelectedKeys={["home"]}
   style={{
     width: collapsed ? "80px" : "200px", // Adjust width when collapsed
   }}
@@ -259,8 +273,9 @@ const TemplateList = () => {
             selectedtemplateComponent === false &&
             selectedReportTemplateComponent === false &&
             reportViewerComponent===false &&
+            dashboardcomponent === false &&
             datasetComponent === false ?(
-              <Dashboard />
+              <Home />
             ) : (
               <>
                 {dashboardcomponent === true && <Dashboard />}

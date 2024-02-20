@@ -48,8 +48,8 @@ formatting_conditions = {}
 # bokeh.sampledata.download()
 app = Flask(__name__)
 CORS(app) 
-ic.disable() 
-# ic.enable()
+# ic.disable() 
+ic.enable()
 global p
 app.secret_key = 'your_secret_key'
 @app.route('/')
@@ -206,8 +206,9 @@ def update_chart_with_formatting_conditions(formatting_conditions):
         elif(condition_column != 'none'):
             print("Not a empty value")
 
-        if roots:
-            first_root = roots[0]
+        if roots_data:
+            print("root_dat is there")
+            first_root = roots_data[0]
             attributes = first_root.get("attributes", {})
             source = attributes.get("source", {})
             source_attributes = source.get("attributes", {})  
@@ -216,6 +217,7 @@ def update_chart_with_formatting_conditions(formatting_conditions):
 
                     # Find the entry with the key matching "apply_column_value"
             selected_entry = next((entry[1]["array"] for entry in entries if entry[0] == apply_column_value), [])
+            print(selected_entry,entries,"selected entry","entries")
         # print(tabledatalist,"tabledatalist")
         # print(roots_data,"roots_data")
         # print(columns_data,"columns_data")

@@ -18,6 +18,7 @@ import Reports from './Components/Pages/Reports/Reports';
 import ExistingReports from './Components/Pages/Reports/existingReports';
 import ReportTemplates from './Components/Pages/Reports/reportTemplate';
 import ReportViewer from './Components/Pages/ReportViewer/reportViewer';
+import Home from './Components/Pages/Dashboard/Home';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
     <Routes>
     <Route path="/" element={<Login/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path="/home" element={<Home/>}/>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/spreadsheet" element={<SpreadSheet/>}/> 
       <Route path="/generatedChart" element={<GeneratedChartPage/>} />

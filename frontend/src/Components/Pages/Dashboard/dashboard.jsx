@@ -404,7 +404,7 @@ const Dashboard = () => {
          
           <Row justify="space-between" align="middle">
                 <Col>
-                    <h2>***Report Designer***</h2>
+                    <h2>***Template/Report Designer***</h2>
                 </Col>
 
             </Row>
