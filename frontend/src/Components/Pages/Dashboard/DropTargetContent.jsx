@@ -1,145 +1,100 @@
-import React, { useEffect, useRef,useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
-import {Layout} from "antd";
-import BokehChart from "./BokehChart";
+import { Layout } from "antd";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import DataTable from "../SpreadSheet/DataTable";
 import { useDispatch, useSelector } from "react-redux";
-import {setDroppedCharts,resetDroppedCharts,setDroppedChartsLayout,setColumnName} from "../../Store/slices/chartSlice/chartSlice";
+import {
+  setDroppedCharts,
+  resetDroppedCharts,
+  setDroppedChartsLayout,
+  setColumnName,
+} from "../../Store/slices/chartSlice/chartSlice";
 import TextBoxComponent from "./TextboxComponent";
 import LogoComponent from "./logocontrol";
 import LabelComponent from "./LabelControl";
-import html2canvas from 'html2canvas';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { setFooterTextboxes,setHeaderTextboxes,setDroppedLabels,setDroppedLogos,setPageBreaks,setDetailTextboxes,
-  setDetailReportTextboxes,setDetailLogos,setDetailLabels,setDetailReportLogos,setDetailReportLabels,setFooterlabels,
-  setFooterlogos, 
-  resetDroppedContent,} from "../../Store/slices/settingSlice/settingSlice";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import {
+  setFooterTextboxes,
+  setHeaderTextboxes,
+  setDroppedLabels,
+  setDroppedLogos,
+  setPageBreaks,
+  setDetailTextboxes,
+  setDetailReportTextboxes,
+  setDetailLogos,
+  setDetailLabels,
+  setDetailReportLogos,
+  setDetailReportLabels,
+  setFooterlabels,
+  setFooterlogos,
+  resetDroppedContent,
+} from "../../Store/slices/settingSlice/settingSlice";
 
-import { setTemplate,} from "../../Store/slices/TemplateSlice/templateslice";
-import '../Dashboard/dashboard.scss';
-import { setTableData } from "../../Store/slices/ReportSlice/reportslice";
-import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
+import { setTemplate } from "../../Store/slices/TemplateSlice/templateslice";
+import "../Dashboard/dashboard.scss";
+import LineChart from "../../../Assets/reportdesignericons/line-chart.svg";
+import PieChart from "../../../Assets/reportdesignericons/pie-chart.svg";
+import violin from "../../../Assets/reportdesignericons/violin.svg";
+import table from "../../../Assets/reportdesignericons/table.svg";
+import map from "../../../Assets/reportdesignericons/map.svg";
+import candlestickchart from "../../../Assets/reportdesignericons/candlestick-chart.svg";
+import correlationchart from "../../../Assets/reportdesignericons/chart.svg";
+import surface from "../../../Assets/reportdesignericons/area-chart.svg";
+import barChart from "../../../Assets/reportdesignericons/barchart.svg";
+import heatmap from "../../../Assets/reportdesignericons/heatmap.svg";
+import contourplot from "../../../Assets/reportdesignericons/contourplot.svg";
+import lowdurationchart from "../../../Assets/reportdesignericons/lowduration.svg";
+import Chartsimg from "./chartsimg";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-// const generatePDF = () => {
-//   const content = document.getElementById("contentcontainer"); 
-//   const pdfOptions = {
-//     margin: 10,
-//     filename: "document.pdf",
-//     image: { type: "jpeg", quality: 0.98 },
-//     jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-//     html2canvas: { scale: 2, logging: true, scrollY: -window.scrollY },
-//   };
 
-//   html2pdf(content, pdfOptions);
-// };
-
-const DropTargetContent =({id})  => {
+const DropTargetContent = ({ id }) => {
   const [offsetX, setOffsetX] = useState(0);
-const [offsetY, setOffsetY] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
   const dispatch = useDispatch();
-  const templatedata = useSelector((state)=>state.templates);
-  const {templateId,templateName} = templatedata;
+  const templatedata = useSelector((state) => state.templates);
+  const { templateId, templateName } = templatedata;
   const droppedCharts = useSelector((state) => state.charts.droppedCharts);
   const droppedChartsLayout = useSelector((state) => state.charts.droppedChartsLayout);
   const filterData = useSelector((state) => state.spreadsheetData.filterData);
-  const controls = useSelector((state)=>state.settings);
-  const {headerTextboxes,footerTextboxes,droppedLabels,droppedLogos,pageBreaks,detailTextboxes,detailReportTextboxes,detailLogos,detailLabels,detailreportLogos,detailreportLabels,footerlabels,footerlogos,reportdata} = controls
- 
-  const swapColumn = useSelector((state)=>state.reports.swapColumn)
+  const controls = useSelector((state) => state.settings);
+  const {
+    headerTextboxes,
+    footerTextboxes,
+    droppedLabels,
+    droppedLogos,
+    pageBreaks,
+    detailTextboxes,
+    detailReportTextboxes,
+    detailLogos,
+    detailLabels,
+    detailreportLogos,
+    detailreportLabels,
+    footerlabels,
+    footerlogos,
+    reportdata,
+  } = controls;
   const chartPositionsRef = useRef([]);
   const reportheaderRef = useRef([]);
   const pagefooterRef = useRef([]);
   const detailsRef = useRef([]);
   const DetailreportRef = useRef([]);
-
-  const captureComponentAsImage = () => {
-    const componentRef = document.getElementById('contentcontainer');
-    html2canvas(componentRef).then((canvas) => {
-      const image = canvas.toDataURL('image/png');
-      const newWindow = window.open();
-      newWindow.document.write('<img src="' + image + '" style="width:100vw;height:100vh;" />');
-    });
+  const generateUniqueId = () => {
+    const timestamp = new Date().getTime();
+    const randomId = Math.random().toString(36).substring(2, 9);
+    return `${timestamp}-${randomId}`;
   };
- 
-const generateUniqueId = () => {
-  const timestamp = new Date().getTime(); 
-  const randomId = Math.random().toString(36).substring(2, 9); // Random number (converted to base 36)
 
-  return `${timestamp}-${randomId}`;
-};
   const handleTextboxChange = (id, newText, dropZone) => {
-    switch (dropZone) {
-      case "reportheader":
-      const updatedHeaderTextboxes = headerTextboxes.map((textbox) =>
-      textbox.id === id ? { ...textbox, text: newText } : textbox
-      );
-      dispatch(setHeaderTextboxes(updatedHeaderTextboxes));
-      break;
-      case "pagefooter":
-      const updatedFooterTextboxes = footerTextboxes.map((textbox) =>
-      textbox.id === id ? { ...textbox, text: newText } : textbox
-      );
-      dispatch(setFooterTextboxes(updatedFooterTextboxes));
-      break;
-      case "details":
-        const updatedDetailsTextboxes = detailTextboxes.map((textbox) =>
-          textbox.id === id ? { ...textbox, text: newText } : textbox
-        );
-        dispatch(setDetailTextboxes(updatedDetailsTextboxes));
-        break;
-      case "Detailreport":
-        const updatedDetailReportTextboxes = detailReportTextboxes.map(
-          (textbox) =>
-            textbox.id === id ? { ...textbox, text: newText } : textbox
-        );
-        dispatch(setDetailReportTextboxes(updatedDetailReportTextboxes));
-        break;
-      default:
-        break;
-    }
+    // Your existing code...
   };
-  // useEffect(() => {
-  
-     
-  //   const detailreportDocument = document.getElementById('details');
-  //  const detailreportscroll = document.getElementById('detailreportscale')
-  //   if (detailreportDocument) {
-  //     const handleMouseMove = (event) => {
-  //       const rect = detailreportDocument.getBoundingClientRect();
-  //       // const mouseX = event.clientX - rect.left + detailreportDocument.scrollLeft;
-  //       // const mouseY = event.clientY - rect.top + detailreportscroll.scrollTop;
-  //       const mouseX = event.clientX - document.documentElement.scrollLeft- rect.left - detailreportDocument.scrollLeft;
-  //       const mouseY = event.clientY - document.documentElement.scrollTop- rect.top - detailreportDocument.scrollTop;
-  //       if (
-  //         mouseX >= 0 &&
-  //         mouseX <= rect.width &&
-  //         mouseY >= 0 &&
-  //         mouseY <= rect.height
-  //       ) {
-  //         setOffsetX(mouseX);
-  //   setOffsetY(mouseY);
-  //         console.log(mouseX,mouseY,"mouseX,mouseY")
-  //         console.log('scroll->l->t->docscroll->l->T', detailreportDocument.scrollLeft, detailreportDocument.scrollTop, document.documentElement.scrollLeft, document.documentElement.scrollTop,);
-  //       }
-  //     };
-  
-  //     document.addEventListener('mousemove', handleMouseMove);
-  
-  //     return () => {
-  //       document.removeEventListener('mousemove', handleMouseMove);
-  //     };
-  //   }
-  // }, []);
+
   const [{ isOver, canDrop }, drop,] = useDrop({
     accept: "SUBMENU_ITEM",
-    // canDrop: (item) => {
-    //   return item.chartType !== "invalid";
-    // },
     canDrop: (item, monitor) => {
       const allowedDropZones = ['details', 'reportheader', 'Detailreport', 'pagefooter','topmargin','marginbottom'];
       const dropPosition = monitor.getClientOffset();
@@ -254,98 +209,13 @@ const generateUniqueId = () => {
        
   
       if (item.chartType !== 14 && item.chartType !== 15 && item.chartType !== 16 && item.chartType !== 17) {
-        try {
-          const token = localStorage.getItem('token');
-          const endpoint = BOKEH_SERVER_URL_ENDPOINTS.generatechart;
-          // console.log("Sending chart type:", item.chartType);
-          const response = await fetch(`${BOKEH_SERVER_URL}${endpoint.url}`, {
-            method: endpoint.method.includes('POST') ? 'POST' : 'GET',
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify({                                                                  
-              chartType: item.chartType,
-              chartData: item.chartData,
-            }),
-          });
-
-          if (response.ok) {
-            const { chartData } = await response.json();
-            console.log(chartData,"chartdata")
-            // console.log(chartData, "response chartdata");
-            const chartId = generateUniqueId()+item.chartType
-            // const tabledata =async()=>{
-            //   try {
-            //     const response = await fetch('http://restapi.adequateshop.com/api/Tourist?page=2');
-            //     if (!response.ok) {
-            //       throw new Error('Network response was not ok');
-            //     }
-        
-            //     const data = await response.json();
-            //     setTableData(data.data);
-            //     await fetch('http://localhost:5000/fetch_table_data', {
-            //       method: 'POST',
-            //       headers: {
-            //         'Content-Type': 'application/json',
-            //       },
-            //       body: JSON.stringify(data.data),
-            //     });
-            //     return data;
-            //   } catch (error) {
-            //     console.error('Error fetching table data:', error);
-            //   }
-            // };
-
-            if(item.chartType === 13){
-              // tabledata()
-             
-          
-            const tablecolumns =JSON.parse(chartData);
-            dispatch(setTableData(tablecolumns));                                             
-            console.log(tablecolumns,"tbc")
-            const columns = tablecolumns.doc.roots[0].attributes.columns.map(column => column.attributes.title);
-            console.log(columns,"columns")
-            dispatch(setColumnName(columns))
-          }
-             dispatch(setDroppedCharts([
-              ...droppedCharts,
-              { chartType: item.chartType, chartData: chartData,chartId:chartId },
-            ])) 
-           
-
-            // dispatch(
-            //   setChartData([
-            //     ...droppedCharts,
-            //     { chartType: item.chartType, chartData: chartData },
-            //   ])
-            // );
-            // const newLayout = [...droppedChartsLayout];
-
-            // // Add layout information for the newly dropped chart
-            // newLayout.push({
-            //   chartType: item.chartType,
-            //   chartData: chartData,
-            //   x: 0,
-            //   y: 0,
-            //   w: 4,
-            //   h: 4,
-            //   i: `chartContainer-${newLayout.length}`,
-            // });
-
-            // dispatch(setDroppedChartsLayout(newLayout));
-            // localStorage.setItem(
-            //   "droppedChartsLayout",
-            //   JSON.stringify(newLayout)
-            // );
-            // renderBokehChart(item.chartType,chartData);
-          } else {
-            console.error("Error generating chart.");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-       
+        console.log(item.chartType, "ct");
+        // const chartComponent = renderComponent(item.chartType);
+        dispatch(setDroppedCharts([
+          ...droppedCharts,
+          { chartType: item.chartType},
+        ])) 
+        // return chartComponent;
       }
     },
 
@@ -354,106 +224,43 @@ const generateUniqueId = () => {
       canDrop: monitor.canDrop(),
     }),
   });
-  
 
-  const extractComponentData = () => {
-    // const templateName = "Template Name";
-    const componentData = {
-      templateId: templateId,
-      name:templateName,
-      droppedCharts,
-      headerTextboxes,
-      droppedLabels,
-      droppedLogos,
-      pageBreaks,
-      detailTextboxes,
-      detailReportTextboxes,
-      detailLogos,
-      detailLabels,
-      detailreportLogos,
-      detailreportLabels,
-      footerlabels,
-      footerlogos,
-      footerTextboxes
-    };
-    return componentData;
-  };
-  const backgroundColor = isOver ? (canDrop ? "gray" : "red") : "transparent";
-
- const componentData = extractComponentData();
-  const handleSaveTemplateClick = () => {
-    dispatch(setTemplate(componentData))
-    dispatch(resetDroppedContent());
-    dispatch(resetDroppedCharts());
-    localStorage.setItem('templateList',JSON.stringify(componentData))
-    // saveTemplateToServer(componentData);
-    // const newWindowUrl = `${window.location.origin}/template/${encodeURIComponent(templateName)}`;
-    // const newWindow = window.open(newWindowUrl, '_blank');
-    // newWindow.onload = function() {
-    //   newWindow.location.href = newWindowUrl;
-    //   newWindow.document.write('<h1>Template Viewer </h1>');
-    //   const componentDataString = JSON.stringify(componentData);
-    //   newWindow.document.write(`<pre>${componentDataString}</pre>`);
-    // };
-  };
-
-
-  // const saveTemplateToServer = (templateData) => {
-  //   // Send a POST request to your server to save the templateData
-  //   fetch("http://localhost:5001/save_template", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({templateId,templateData}),
-  //   })
-  //     .then((response) =>{if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     return response.json();})
-  //     .then((data) => {
-  //       console.log("Template saved successfully:", data);
-        
-       
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error saving template:", error);
-  //     });
-      
-  
+  // const renderComponent = (chartType) => {
+  //   console.log(chartType, "render");
+  //   switch (chartType) {
+  //     case "2":
+  //       return <img src={LineChart} alt="" />;
+  //     case "3":
+  //       return <img src={PieChart} alt="" />;
+  //     case "4":
+  //       return <img src={barChart} alt="" />;
+  //     case "5":
+  //       return <img src={map} alt="" />;
+  //     case "6":
+  //       return <img src={surface} alt="" />;
+  //     case "7":
+  //       return <img src={contourplot} alt="" />;
+  //     case "8":
+  //       return <img src={candlestickchart} alt="" />;
+  //     case "9":
+  //       return <img src={violin} alt="" />;
+  //     case "10":
+  //       return <img src={correlationchart} alt="" />;
+  //     case "11":
+  //       return <img src={lowdurationchart} alt="" />;
+  //     case "12":
+  //       return <img src={heatmap} alt="" />;
+  //     case "13":
+  //       return <img src={table} alt="" />;
+  //     default:
+  //       return null;
+  //   }
   // };
-const handleSaveClick=()=>{
-  const contentRef = document.getElementById('Detailreport'); 
-    const content = contentRef.innerHTML;
-      //  dispatch(setTemplate(componentData))
-    // Define the document definition
-    const documentDefinition = {
-      content: [
-        { text: 'Report Content', style: 'header' },
-        { image: contentRef, style: 'body' },
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          margin: [0, 0, 0, 10],
-        },
-        body: {
-          fontSize: 14,
-        },
-      },
-    };
-    // pdfMake.createPdf(documentDefinition).download('report.pdf'); //for download
-    pdfMake.createPdf(documentDefinition).open(); //Open the PDF in a new window
-      // pdfMake.createPdf(documentDefinition).print(); //for print
-
-}
-
 
   return (
     <>
-    
-    <div id={id} >
+
+<div id={id} >
        <Layout.Content
         ref={drop}
         className="content-container"
@@ -643,29 +450,23 @@ const handleSaveClick=()=>{
                         </div>
                       ) : null}
 
-                      {droppedCharts?.map((chart, index) => (
-                        <div
-                          key={`chart-${index}`}
-                          id={`chartContainer-${index}`}
-                          className="dropcontent"
-                          style={{
-                            position: "absolute",
-                            left: chart.x,
-                            top: chart.y,
-                            width: chart.w,
-                            height: chart.h,
-                          }}
-                        >
-                          <BokehChart
-                            className="dashboard-chart"
-                            chartType={chart.chartType}
-                            chartData={chart.chartData}
-                            containerId={`chartContainer-${index}`}
-                            chartId={chart.chartId}
-                            chartKey={`chart-${index}`}
-                          />
-                        </div>
-                      ))}
+{droppedCharts.map((chart, index) => (
+              <div
+                key={`chart-${index}`}
+                id={`chartContainer-${index}`}
+                className="dropcontent"
+                // style={{
+                //   position: "absolute",
+                //   left: chart.x,
+                //   top: chart.y,
+                //   width: chart.w,
+                //   height: chart.h,
+                // }}
+              >
+                {/* {renderComponent(chart.chartType)} */}
+                <Chartsimg chartType={chart.chartType}/>
+              </div>
+            ))}
                     </ResponsiveGridLayout>
 
                     {detailReportTextboxes?.map((textbox) => (
@@ -751,10 +552,9 @@ const handleSaveClick=()=>{
         </div>
       </Layout.Content>
     </div>
+    
     </>
   );
 };
 
 export default DropTargetContent;
-
-

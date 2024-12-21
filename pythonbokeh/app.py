@@ -48,8 +48,8 @@ formatting_conditions = {}
 # bokeh.sampledata.download()
 app = Flask(__name__)
 CORS(app) 
-# ic.disable() 
-ic.enable()
+ic.disable() 
+# ic.enable()
 global p
 app.secret_key = 'your_secret_key'
 @app.route('/')
@@ -748,9 +748,9 @@ def generate_bokeh_chart(chart_type,table_data=None,):
                     if(value >= 30){
                         return('green')}
                     else if (value < 30)
-                        {return('red')}
+                        {return('white')}
                     }()) %>;
-                color: white; font-weight: bold;">
+                color: block; font-weight: bold;">
                 <%= value %>
             </div>
             """

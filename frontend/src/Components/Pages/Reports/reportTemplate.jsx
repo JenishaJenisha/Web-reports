@@ -42,7 +42,7 @@ import preview from "../../../Assets/reportdesignericons/preview.svg";
 import ChartbindingForm from "./chartbindingForm";
 import ChartOption from './chartOption';
 import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
-
+import Chartsimg from "../Dashboard/chartsimg";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const { Header } = Layout;
 
@@ -292,39 +292,44 @@ const ReportTemplates = ({ id, selectedTempReportdetail }) => {
         item.chartType !== 16 &&
         item.chartType !== 17
       ) {
-        try {
-          const token = localStorage.getItem('token');
-          const endpoint = BOKEH_SERVER_URL_ENDPOINTS.generatechart;
-          // console.log("Sending chart type:", item.chartType);
-          const response = await fetch(`${BOKEH_SERVER_URL}${endpoint.url}`, {
-            method: endpoint.method.includes('POST') ? 'POST' : 'GET',
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              chartType: item.chartType,
-              chartData: item.chartData,
-              // chartId: item.chartId
+        const chartId = generateUniqueId()+item.chartType;
+        dispatch(setreportCharts([
+          ...reportcharts,
+          { chartType: item.chartType},
+        ]));
+        // try {
+        //   const token = localStorage.getItem('token');
+        //   const endpoint = BOKEH_SERVER_URL_ENDPOINTS.generatechart;
+        //   // console.log("Sending chart type:", item.chartType);
+        //   const response = await fetch(`${BOKEH_SERVER_URL}${endpoint.url}`, {
+        //     method: endpoint.method.includes('POST') ? 'POST' : 'GET',
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "Authorization": `Bearer ${token}`,
+        //     },
+        //     body: JSON.stringify({
+        //       chartType: item.chartType,
+        //       chartData: item.chartData,
+        //       // chartId: item.chartId
             
-            }),
-          });
+        //     }),
+        //   });
 
-          if (response.ok) {
-            const { chartData } = await response.json();
-            console.log(chartData,"chartdata")
-            const chartId = generateUniqueId()+item.chartType;
-            dispatch(setreportCharts([
-              ...reportcharts,
-              { chartType: item.chartType, chartData: chartData ,chartId:chartId},
-            ]));
+        //   if (response.ok) {
+        //     const { chartData } = await response.json();
+        //     console.log(chartData,"chartdata")
+        //     const chartId = generateUniqueId()+item.chartType;
+        //     dispatch(setreportCharts([
+        //       ...reportcharts,
+        //       { chartType: item.chartType, chartData: chartData ,chartId:chartId},
+        //     ]));
           
-          } else {
-            console.error("Error generating chart.");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        //   } else {
+        //     console.error("Error generating chart.");
+        //   }
+        // } catch (error) {
+        //   console.error("Error:", error);
+        // }
       }
     },
 
@@ -1386,24 +1391,25 @@ console.log(formattedValues,"formattedValues")
                                 key={`chart-${index}`}
                                 id={`chartContainer-${index}`}
                                 className="dropcontent chartcontrolconfig"
-                                style={{
-                                  position: "absolute",
-                                  left: chart.x,
-                                  top: chart.y,
-                                  width: chart.w,
-                                  height: chart.h,
-                                }}
+                                // style={{
+                                //   position: "absolute",
+                                //   left: chart.x,
+                                //   top: chart.y,
+                                //   width: chart.w,
+                                //   height: chart.h,
+                                // }}
                               >
                               
-                                <div className="bokehchartconfig"> 
-                                <BokehChart
+                                <div className="bokehchartconfig "> 
+                                {/* <BokehChart
                                   key={index}
                                   className="dashboard-chart"
                                   chartType={chart.chartType}
                                   chartData={chart.chartData}
                                   chartId={chart.chartId}
                                   containerId={`chartContainer-${index}`}
-                                />
+                                /> */}
+                                 <Chartsimg chartType={chart.chartType} />
                              </div> 
                              { chart.chartType ===  13 &&
                                 <>

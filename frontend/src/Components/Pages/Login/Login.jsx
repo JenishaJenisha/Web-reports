@@ -27,60 +27,63 @@ const Login = () => {
             }
         }
     }, []);
-    const onFinish = async (values) => {
-        try {
-            const { UserName, Password } = values;
-            const requestData = {
-                UserName,
-                Password,
-                grant_type: 'password'
-            };
-            const requestDataEncoded = qs.stringify(requestData);
-            const config = {
-                method: LOGIN_API_ENDPOINTS.login.method,
-                url: `${LOGIN_API_BASE_URL}${LOGIN_API_ENDPOINTS.login.url}`,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                data: requestDataEncoded,
-            };
-            const response = await axios.request(config);
-            if (response.status === 200) {
-                const data = response.data;
-                const token = data.access_token;
-                const expiresIn = new Date(new Date().getTime() + (data.expires_in * 1000));
-                localStorage.setItem('token', token);
-                localStorage.setItem('expires_in', expiresIn);
-                dispatch(setLoginuser(values));
-                console.log('Login successful');
+    // const onFinish = async (values) => {
+    //     try {
+    //         const { UserName, Password } = values;
+    //         const requestData = {
+    //             UserName,
+    //             Password,
+    //             grant_type: 'password'
+    //         };
+    //         const requestDataEncoded = qs.stringify(requestData);
+    //         const config = {
+    //             method: LOGIN_API_ENDPOINTS.login.method,
+    //             url: `${LOGIN_API_BASE_URL}${LOGIN_API_ENDPOINTS.login.url}`,
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //             },
+    //             data: requestDataEncoded,
+    //         };
+    //         const response = await axios.request(config);
+    //         if (response.status === 200) {
+    //             const data = response.data;
+    //             const token = data.access_token;
+    //             const expiresIn = new Date(new Date().getTime() + (data.expires_in * 1000));
+    //             localStorage.setItem('token', token);
+    //             localStorage.setItem('expires_in', expiresIn);
+    //             dispatch(setLoginuser(values));
+    //             console.log('Login successful');
                 
-                if(token != null){
-                    navigate('/dashboardtemplate');
-                }
-                else{
-                     message.error("Invalid UserName/Password")
-                }
-                // if(UserName === 'admin'&& Password === "admin@123"){
-                //     // message.success("Login Successfully")
-                //     navigate('/dashboardtemplate');
-                // }
-                // else{
-                //     message.error("Invalid UserName/Password")
-                // }
+    //             if(token != null){
+    //                 navigate('/dashboardtemplate');
+    //             }
+    //             else{
+    //                  message.error("Invalid UserName/Password")
+    //             }
+    //             // if(UserName === 'admin'&& Password === "admin@123"){
+    //             //     // message.success("Login Successfully")
+    //             //     navigate('/dashboardtemplate');
+    //             // }
+    //             // else{
+    //             //     message.error("Invalid UserName/Password")
+    //             // }
                 
-            } else {
-                const responseData = await response.json();
-                const { error, error_description } = responseData;
-                if (error === 'invalid_grant') {
-                    console.error('Invalid username or password. Please try again.');
-                } else {
-                    console.error('An error occurred during login:', error_description);
-                }
-            }
-        } catch (error) {
-            console.error('Login failed:', error);
-        }
-    };
+    //         } else {
+    //             const responseData = await response.json();
+    //             const { error, error_description } = responseData;
+    //             if (error === 'invalid_grant') {
+    //                 console.error('Invalid username or password. Please try again.');
+    //             } else {
+    //                 console.error('An error occurred during login:', error_description);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Login failed:', error);
+    //     }
+    // };
+    const onFinish =()=>{
+        navigate('/dashboardtemplate');
+    }
     const handleContinue = () => {
         setTokenExpirationMessage(false);
         onFinish()

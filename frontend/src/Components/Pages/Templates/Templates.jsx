@@ -24,7 +24,7 @@ import { setCreatedAt ,setTempCharts,setTemplatedetailtextboxes,setTemplatedetai
 } from "../../Store/slices/TemplateSlice/templateslice";
 import {setReportName,setReportId,setReports,setIsReportModalOpen} from '../../Store/slices/ReportSlice/reportslice';
 import { BOKEH_SERVER_URL,BOKEH_SERVER_URL_ENDPOINTS } from "../../Config/config";
-
+import Chartsimg from "../Dashboard/chartsimg";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const {Header} = Layout;
 
@@ -315,35 +315,40 @@ useEffect(()=>{
     //     }
     // }
       if (item.chartType !== 14 && item.chartType !== 15 && item.chartType !== 16 && item.chartType !== 17) {
-        
-        try {
-          // console.log("Sending chart type:", item.chartType);
-          const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              chartType: item.chartType,
-              chartData: item.chartData,
-            }),
-          });
+        console.log(item.chartType, "ct");
+        // const chartComponent = renderComponent(item.chartType);
+        dispatch(setTempCharts([
+          ...tempcharts,
+          { chartType: item.chartType},
+        ]))
+        // try {
+        //   // console.log("Sending chart type:", item.chartType);
+        //   const response = await fetch(`${BOKEH_SERVER_URL}${BOKEH_SERVER_URL_ENDPOINTS.generatechart.url}`, {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //       chartType: item.chartType,
+        //       chartData: item.chartData,
+        //     }),
+        //   });
 
-          if (response.ok) {
-            const { chartData } = await response.json();
-            // console.log(chartData, "response chartdata");
+        //   if (response.ok) {
+        //     const { chartData } = await response.json();
+        //     // console.log(chartData, "response chartdata");
             
-          const chartId = generateUniqueId()+item.chartType;
-          dispatch(setTempCharts([
-            ...tempcharts,
-            { chartType: item.chartType, chartData: chartData,chartId:chartId },
-          ]))
-          } else {
-            console.error("Error generating chart.");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        //   const chartId = generateUniqueId()+item.chartType;
+        //   dispatch(setTempCharts([
+        //     ...tempcharts,
+        //     { chartType: item.chartType, chartData: chartData,chartId:chartId },
+        //   ]))
+        //   } else {
+        //     console.error("Error generating chart.");
+        //   }
+        // } catch (error) {
+        //   console.error("Error:", error);
+        // }
         
       }
 
@@ -699,14 +704,7 @@ useEffect(()=>{
                         height: chart.h,
                       }}
                     >
-                      <BokehChart
-                        key={index}
-                        className="dashboard-chart"
-                        chartType={chart.chartType}
-                        chartData={chart.chartData}
-                        chartId={chart.chartId}
-                        containerId={`chartContainer-${index}`}
-                      />
+                      <Chartsimg chartType={chart.chartType}/>
                       </div>
                     ))}
                     

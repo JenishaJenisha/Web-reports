@@ -223,7 +223,7 @@ const handleLogout = () => {
     <>
       <Layout>
         <Header className="homeHeader">
-          <h2 className="homeheaderContent">Reports -Supra Controls Pvt.Ltd</h2>
+          <h2 className="homeheaderContent"> Web Reports</h2>
           <div className="logoutdiv" onClick={handleLogout}>
           
             <img src={usericon} alt="user"></img>
@@ -333,7 +333,7 @@ const handleLogout = () => {
             )}
           </Content>
           <Footer className="footercontent">
-            copyright©2023 Supra controls pvt ltd.
+            copyright©2023 JS.
           </Footer>
         </Layout>
       </Layout>

@@ -26,6 +26,7 @@ function App() {
     
     <Routes>
     <Route path="/" element={<Login/>}/>
+    {/* <Route path="/" element={<TemplateList />} /> */}
       <Route path='/login' element={<Login/>}/>
       <Route path="/home" element={<Home/>}/>
       <Route path="/dashboard" element={<Dashboard />} />
